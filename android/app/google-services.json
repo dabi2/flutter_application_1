@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "761321428636",
+    "project_id": "finallyloan-a34ea",
+    "storage_bucket": "finallyloan-a34ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761321428636:android:6e5350d4e45a1aba5e7f59",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA97iZXbFhPu0d-ruftbHNN5-BKIkgaVDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
