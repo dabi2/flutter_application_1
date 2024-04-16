@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/color/colors.dart';
+import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:flutter_application_1/pages/drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -115,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       ElevatedButton.icon(
                         onPressed: () {
+                          Navigator.push(context,MaterialPageRoute(builder: (context) =>Applyloan()));
                         },
                         icon: const Icon(
                           Icons.monetization_on_rounded,
