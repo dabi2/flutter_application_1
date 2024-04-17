@@ -53,59 +53,13 @@ class ApplyloanState extends State<Applyloan> {
         ],
         elevation: 100,
       ),
-      drawer: Drawerclass().buildDrawer(context),
+      // drawer: Drawerclass().buildDrawer(context),
       body: ListView(
         children: [
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 90,right: 90),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Card(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.network(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                              height: 150,
-                            ),
-                          ),
-                          Text(
-                            "Instant Loan",
-                            style: GoogleFonts.lato(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.network(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                              height: 150,
-                            ),
-                          ),
-                          Text(
-                            "Instant Loan",
-                            style: GoogleFonts.lato(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 90,right: 90),
+                padding: const EdgeInsets.only(left: 30,right: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -116,10 +70,10 @@ class ApplyloanState extends State<Applyloan> {
                             children: [
                               Image.network(
                                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                                height: 150,
+                                height: 100,width: 200,
                               ),
                               Text(
-                                "car loan",
+                                "HOME LOAN",
                                 style: GoogleFonts.lato(fontSize: 20),
                               )
                             ],
@@ -132,7 +86,87 @@ class ApplyloanState extends State<Applyloan> {
                         children: [
                           Image.network(
                             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                            height: 150,
+                                height: 100,width: 200,
+                          ),
+                          Text(
+                            "EDUCATION LOAN",
+                            style: GoogleFonts.lato(fontSize: 20),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30,right: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Card(
+                          child: Column(
+                            children: [
+                              Image.network(
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                                height: 100,width: 200,
+                              ),
+                              Text(
+                                "CAR LOAN",
+                                style: GoogleFonts.lato(fontSize: 20),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Card(
+                      child: Column(
+                        children: [
+                          Image.network(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                                height: 100,width: 200,
+                          ),
+                          Text(
+                            "PERSONAL LOAN",
+                            style: GoogleFonts.lato(fontSize: 20),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30,right: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Card(
+                          child: Column(
+                            children: [
+                              Image.network(
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                                height: 100,width: 200,
+                              ),
+                              Text(
+                                "INSTANT LOAN",
+                                style: GoogleFonts.lato(fontSize: 20),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Card(
+                      child: Column(
+                        children: [
+                          Image.network(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                                height: 100,width: 200,
                           ),
                           Text(
                             "car loan",
@@ -144,6 +178,7 @@ class ApplyloanState extends State<Applyloan> {
                   ],
                 ),
               ),
+              
             ],
           )
         ],
