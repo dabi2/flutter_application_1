@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/login/loginpage.dart';
 import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
+import 'package:flutter_application_1/pages/form_to_apply.dart';
 import 'package:flutter_application_1/pages/homepage.dart';
 
 void main() async {
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Applyloan(),
+      home: const Personalinformation(),
     );
   }
 }
