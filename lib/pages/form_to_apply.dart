@@ -26,11 +26,13 @@ class PersonalinformationState extends State<Personalinformation> {
       appBar: AppBar(
         title: Text(
           "PERSONAL INFORMATION",
+          
           style: GoogleFonts.lato(fontSize: 16),
         ),
       ),
       body: Column(
         children: [
+          Text("here should have a male and female pincode also pan number and adhar"),
           Form(
             key: _formkey,
             child: Column(
