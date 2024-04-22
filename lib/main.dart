@@ -59,4 +59,27 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-// how to report a scammer?
+// Sure, let's calculate the COCOMO model for an organic type project based on the total lines of code (LOC) you provided.
+
+// Given:
+// Total Lines of Code (LOC) = 2852
+
+// Since the Basic COCOMO model for organic type projects uses the formula:
+
+// \[ Effort = a \times (KLOC)^b \]
+
+// We need to determine the values of \( a \) and \( b \) for organic projects. For organic projects, typical values are \( a = 2.4 \) and \( b = 1.05 \).
+
+// Using the provided LOC, we first convert it to KLOC:
+// \[ KLOC = \frac{2852}{1000} = 2.852 \]
+
+// Now, we can calculate the effort:
+// \[ Effort = 2.4 \times (2.852)^{1.05} \]
+
+// \[ Effort \approx 2.4 \times (3.089)^{1.05} \]
+
+// \[ Effort \approx 2.4 \times 3.409 \]
+
+// \[ Effort \approx 8.181 person-months \]
+
+// So, based on the provided LOC and the Basic COCOMO model for organic type projects, the estimated effort required for your project is approximately 8.181 person-months.
