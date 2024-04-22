@@ -1,125 +1,4 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:flutter_application_1/color/colors.dart';
-// import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
-// import 'package:google_fonts/google_fonts.dart';
 
-// class Loginpage extends StatefulWidget {
-//   const Loginpage({super.key});
-
-//   @override
-//   State<Loginpage> createState() => _LoginpageState();
-// }
-
-// class _LoginpageState extends State<Loginpage> {
-//   String email = "", password = "";
-//   TextEditingController emailController = new TextEditingController();
-//   TextEditingController passwordController = new TextEditingController();
-
-//   final _formkey = GlobalKey<FormState>();
-//   registration()async{
-//     if (password != null&& emailController.text!=""&& passwordController.text!=""){
-//       try {
-//         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("registered successfully",style: TextStyle(fontSize: 20.0),)));
-//         Navigator.push(
-//           context,MaterialPageRoute(builder: (context) => Mybottomnavigationbar())
-//         );
-//       } on FirebaseAuthException catch(e){
-//         if(e.code=='weak - Password'){
-//           ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.amber,content: Text("Password Provide is too weak",style: TextStyle(fontSize: 18.0),),));
-
-//         }else if(e.code == "email already in use"){
-//           ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.amber,content: Text("account Already exist",style: TextStyle(fontSize: 18.0),),));
-//         }
-//       }
-//     }
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: MainColors.body,
-//       body: Column(
-//         children: [
-//           ClipRRect(
-//             borderRadius: const BorderRadius.only(
-//                 bottomLeft: Radius.circular(20),
-//                 bottomRight: Radius.circular(20)),
-//             // borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20))),
-//             child: Image.network(
-//               "https://images.unsplash.com/photo-1497864149936-d3163f0c0f4b?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Container(
-//               decoration: BoxDecoration(
-//                 border: Border.all(color: Colors.black)
-//               ),
-//               child: Form(
-//                   key: _formkey,
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(15.0),
-//                     child: Container(
-//                       decoration: BoxDecoration(
-//                         border: Border.all(color: Colors.black)
-//                       ),
-//                       child: Column(
-//                         children: [
-//                           TextFormField(
-//                             validator: (value){
-//                               if(value == null||value.isEmpty) {
-//                                 return "Please Enter YOur Email";
-//                               }
-//                               return null;
-//                             },
-//                             controller: emailController,
-//                             decoration: InputDecoration(
-//                               // style: GoogleFonts.lato(fontSize:20,),
-//                               // labelText: "Email,",labelStyle: TextStyle(color: Colors.white,fontSize: 16),
-//                               border: InputBorder.none,
-//                               hintText: "Email",
-//                               hintStyle: TextStyle(
-//                                 color: Color(0xFFb2b7bf),fontSize: 18.0,
-//                               ),
-//                             ),
-//                           ),
-//                           Divider(
-//                             endIndent: 50,
-//                             indent: 50,
-//                             color: Colors.black,
-//                           ),
-//                           SizedBox(
-//                             height: 10,
-//                           ),
-//                           TextFormField(
-//                             validator: (value){
-//                               if(value == null||value.isEmpty) {
-//                                 return "Please Enter YOur password";
-//                               }
-//                               return null;
-//                             },
-//                             controller: passwordController,
-//                             decoration: InputDecoration(
-//                               border: InputBorder.none,
-//                               hintText: "Password",
-//                               hintStyle: TextStyle(
-//                                 color: Color(0xFFb2b7bf),fontSize: 18.0,
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   )),
-//             ),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
 // ignore_for_file: use_build_context_synchronously
 
 
@@ -142,8 +21,8 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   String email = "", password = "";
 
-  TextEditingController mailcontroller = new TextEditingController();
-  TextEditingController passwordcontroller = new TextEditingController();
+  TextEditingController mailcontroller =  TextEditingController();
+  TextEditingController passwordcontroller =  TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
 
@@ -173,6 +52,10 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    Size screenSize = mediaQueryData.size;
+    double screenWidth = screenSize.width;
+    double screenHeight = screenSize.height;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -181,7 +64,10 @@ class _LogInState extends State<LogIn> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: screenWidth * 0.8,
+                  height: screenHeight * 0.3,
+
+                  // height: screenHeight * 0.8,
                   child: Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlCn7_4h1dXmXWsztCkI2QizVZpMAkdbOBu1vVDNIN1A&s")),
             ),
             const SizedBox(

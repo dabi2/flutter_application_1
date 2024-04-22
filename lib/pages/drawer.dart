@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
+import 'package:flutter_application_1/login/loginpage.dart';
 
 class Drawerclass{
 Widget buildDrawer(BuildContext context){
@@ -63,6 +65,7 @@ Widget buildDrawer(BuildContext context){
           leading: const Icon(Icons.logout_rounded,color: Colors.white,),
           title: const Text('Logout',style: TextStyle(color: Colors.white),),
           onTap: () {
+            _logout(context);
             // FirebaseAuth.instance.signOut().then((value) {
             //  Navigator.push(context,MaterialPageRoute(builder: (context) => SignInScreen())); 
             // });
@@ -72,5 +75,9 @@ Widget buildDrawer(BuildContext context){
       ],
     ),
   );
+}
+void _logout(BuildContext context) async{
+  await FirebaseAuth.instance.signOut();
+  Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>LogIn()));
 }
 }
