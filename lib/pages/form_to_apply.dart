@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/AccountInformation.dart';
@@ -15,12 +17,16 @@ class Personalinformation extends StatefulWidget {
 }
 
 class PersonalinformationState extends State<Personalinformation> {
-  String fullname = "", dob = "", fatherName = "", address = "", gender = "";
+  String fullname = "", dob = "", fatherName = "", address = "", gender = "", aadhar = "",ifsc = "",passport = "",loanAmount = "";
   TextEditingController fullmamecontroller = TextEditingController();
   TextEditingController dobcontroller = TextEditingController();
   TextEditingController fatherNamecontroller = TextEditingController();
   TextEditingController addresscontroller = TextEditingController();
   TextEditingController gendercontroller = TextEditingController();
+  TextEditingController aadharcontroller = TextEditingController();
+  TextEditingController ifsccontroller = TextEditingController();
+  TextEditingController passportSizecontroller = TextEditingController();
+  TextEditingController loanAmountcontroller = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
   @override
@@ -32,7 +38,9 @@ class PersonalinformationState extends State<Personalinformation> {
           style: GoogleFonts.lato(fontSize: 16),
         ),
       ),
-      body: Column(
+      body:ListView(
+        children: [
+          Column(
         children: [
           const Text(
               "here should have a male and female pincode also pan number and adhar"),
@@ -114,7 +122,7 @@ class PersonalinformationState extends State<Personalinformation> {
                   const SizedBox(
                     height: 30.0,
                   ),
-                  Container(
+                     Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 2.0, horizontal: 30.0),
                     decoration: BoxDecoration(
@@ -168,6 +176,83 @@ class PersonalinformationState extends State<Personalinformation> {
                       },
                     ),
                   ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                   Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 30.0),
+                    decoration: BoxDecoration(
+                        color: const Color(0xFFedf0f8),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter Aadhar Number';
+                        }
+                        return null;
+                      },
+                      controller: aadharcontroller,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Aadhar Number",
+                          hintStyle: TextStyle(
+                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                   Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 30.0),
+                    decoration: BoxDecoration(
+                        color: const Color(0xFFedf0f8),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter THE Correct IFSC code';
+                        }
+                        return null;
+                      },
+                      controller: ifsccontroller,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Loan Amount",
+                          hintStyle: TextStyle(
+                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                   Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 30.0),
+                    decoration: BoxDecoration(
+                        color: const Color(0xFFedf0f8),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter Loan Amount';
+                        }
+                        return null;
+                      },
+                      controller: loanAmountcontroller,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Loan Amount",
+                          hintStyle: TextStyle(
+                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                   
+                  
                   FloatingActionButton(
                     onPressed: _submitForm,
                     child: const Icon(Icons.arrow_forward_ios_rounded),
@@ -178,8 +263,13 @@ class PersonalinformationState extends State<Personalinformation> {
           )
         ],
       ),
+        ],
+      ) 
+      
     );
   }
+  
+
 
   Future<void> _selectDate() async {
     DateTime? picked = await showDatePicker(
@@ -200,7 +290,7 @@ class PersonalinformationState extends State<Personalinformation> {
       try {
         showDialog(
           context: context,
-          barrierDismissible: false, // Prevent user from dismissing dialog
+          barrierDismissible: false, 
           builder: (BuildContext context) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -212,13 +302,16 @@ class PersonalinformationState extends State<Personalinformation> {
 
         // Perform form submission asynchronously
         await Future.delayed(const Duration(seconds: 2));
-        await FirebaseFirestore.instance.collection('personal_info').add({
+        await FirebaseFirestore.instance.collection('Applicant').add({
           'userId':userId,
           'fullName': fullmamecontroller.text,
           'dob': dobcontroller.text,
           'fatherName': fatherNamecontroller.text,
           'address': addresscontroller.text,
           'gender': gendercontroller.text,
+          'aadhar': aadharcontroller.text,
+          'ifsc': ifsccontroller.text,
+          'loanAmount': loanAmountcontroller.text,
         });
         // Clear form fields after successful submission
         fullmamecontroller.clear();
@@ -226,13 +319,14 @@ class PersonalinformationState extends State<Personalinformation> {
         fatherNamecontroller.clear();
         addresscontroller.clear();
         gendercontroller.clear();
+        aadharcontroller.clear();
+        ifsccontroller.clear();
+        loanAmountcontroller.clear();
         // navigate to a bank info
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => const AccountInformation()));
-                Navigator.pop(context,MaterialPageRoute(builder: (context) => Applyloan()));
-
         // navigate to a bank info
 
         // Optionally show a success message

@@ -82,13 +82,13 @@ class ApplyloanState extends State<Applyloan> {
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
-                                       Navigator.push(context,MaterialPageRoute(builder: (context) =>Personalinformation()));
+                                       Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                     },
                                     child: Text(
                                       "Apply Now",
                                       style: GoogleFonts.lato(fontSize: 16),
                                     )),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                               ],
@@ -110,13 +110,13 @@ class ApplyloanState extends State<Applyloan> {
                             ),
                             ElevatedButton(
                                 onPressed: () {
-                                  Navigator.push(context,MaterialPageRoute(builder: (context) =>Personalinformation()));
+                                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                 },
                                 child: Text(
                                   "Apply Now",
                                   style: GoogleFonts.lato(fontSize: 16),
                                 )),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                           ],
@@ -146,13 +146,13 @@ class ApplyloanState extends State<Applyloan> {
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Personalinformation()));
+                                      Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                     },
                                     child: Text(
                                       "Apply Now",
                                       style: GoogleFonts.lato(fontSize: 16),
                                     )),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                               ],
@@ -174,13 +174,13 @@ class ApplyloanState extends State<Applyloan> {
                             ),
                             ElevatedButton(
                                 onPressed: () {
-                                  Navigator.push(context,MaterialPageRoute(builder: (context) =>Personalinformation()));
+                                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                 },
                                 child: Text(
                                   "Apply Now",
                                   style: GoogleFonts.lato(fontSize: 16),
                                 )),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                           ],
@@ -210,13 +210,13 @@ class ApplyloanState extends State<Applyloan> {
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Personalinformation()));
+                                      Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                     },
                                     child: Text(
                                       "Apply Now",
                                       style: GoogleFonts.lato(fontSize: 16),
                                     )),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                               ],
@@ -238,13 +238,13 @@ class ApplyloanState extends State<Applyloan> {
                             ),
                             ElevatedButton(
                                 onPressed: () {
-                                  Navigator.push(context,MaterialPageRoute(builder: (context) =>Personalinformation()));
+                                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                 },
                                 child: Text(
                                   "Apply Now",
                                   style: GoogleFonts.lato(fontSize: 16),
                                 )),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                           ],

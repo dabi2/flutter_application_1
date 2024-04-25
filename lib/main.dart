@@ -1,30 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/login/loginpage.dart';
 import 'package:flutter_application_1/pages/AccountInformation.dart';
 import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
 import 'package:flutter_application_1/pages/form_to_apply.dart';
 import 'package:flutter_application_1/pages/homepage.dart';
+import 'package:flutter_application_1/razor_pay/razorpay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    if (kIsWeb) {
-    await Firebase.initializeApp(options: const FirebaseOptions(apiKey: "AIzaSyDOf3QU3TCYQf1LkPynXmrij1bUyEA5w5w",
-  authDomain: "finallyloan-a34ea.firebaseapp.com",
-  projectId: "finallyloan-a34ea",
-  storageBucket: "finallyloan-a34ea.appspot.com",
-  messagingSenderId: "761321428636",
-  appId: "1:761321428636:web:784edc6bdb3da5c25e7f59",
-  measurementId: "G-7LE6RRH5P9"));
-  } else {
-    await Firebase.initializeApp();
-  }
-  } catch (e) {
-    print("Error initializing Firebase: $e");
-  }
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -40,7 +28,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LogIn(),
+      home: const RazorpayScreen(),
     );
   }
 }
