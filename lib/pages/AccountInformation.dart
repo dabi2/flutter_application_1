@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
+import 'package:flutter_application_1/pages/loanpage.dart';
 
 class AccountInformation extends StatefulWidget {
   const AccountInformation({Key? key}) : super(key: key);
@@ -14,6 +16,7 @@ class _AccountInformationState extends State<AccountInformation> {
   double interestRate = 0.0;
   int duration = 1;
   String fromDate = DateTime.now().toString().split(" ")[0];
+   bool isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -21,7 +24,7 @@ class _AccountInformationState extends State<AccountInformation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Loan Information"),
+        title: Text("Loan"),
       ),
       body: Padding(
         padding: EdgeInsets.all(20.0),
@@ -66,25 +69,25 @@ class _AccountInformationState extends State<AccountInformation> {
                 },
               ),
               SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Interest Rate: ${interestRate.toStringAsFixed(2)}%"),
-                  Slider(
-                    value: interestRate,
-                    min: 0.0,
-                    max: 20.0,
-                    divisions: 200,
-                    label: interestRate.toStringAsFixed(2),
-                    onChanged: (value) {
-                      setState(() {
-                        interestRate = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.0),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Text("Interest Rate: ${interestRate.toStringAsFixed(2)}%"),
+              //     Slider(
+              //       value: interestRate,
+              //       min: 0.0,
+              //       max: 20.0,
+              //       divisions: 200,
+              //       label: interestRate.toStringAsFixed(2),
+              //       onChanged: (value) {
+              //         setState(() {
+              //           interestRate = value;
+              //         });
+              //       },
+              //     ),
+              //   ],
+              // ),
+              // SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -129,16 +132,26 @@ class _AccountInformationState extends State<AccountInformation> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isLoading = true;
+                    });
                     // Save data to Firestore
                     saveLoanInformation();
                   }
                 },
                 child: Text("Submit"),
               ),
+              if (isLoading)
+            Center(
+              child: CircularProgressIndicator(backgroundColor: Colors.amber,),
+            ),
             ],
           ),
         ),
+        
       ),
+      
+      
     );
   }
 
@@ -153,11 +166,25 @@ class _AccountInformationState extends State<AccountInformation> {
         'duration': duration,
         'fromDate': fromDate,
       });
+      setState(() {
+        isLoading = false;
+      });
+      showDialog(context: context, builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Application Submitted"),
+          content: Text("Your application has been submitted and is being processed"),
+          actions: [
+            TextButton(onPressed: (){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Mybottomnavigationbar() ,));
+            }, child: Text("OK"))
+          ],
+        );
+      });
 
       // Optionally show a success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Loan information submitted successfully')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Loan information submitted successfully')),
+      // );
     } catch (e) {
       // Handle errors
       print('Error submitting loan information: $e');
@@ -167,6 +194,9 @@ class _AccountInformationState extends State<AccountInformation> {
             content: Text(
                 'Error submitting loan information. Please try again later')),
       );
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }

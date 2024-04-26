@@ -18,7 +18,7 @@ class _MybottomnavigationbarState extends State<Mybottomnavigationbar> {
     const MyHomePage(),
     // const Loanpage(),
     const Loanpage(),
-    const Profilepage(),
+    const Profilepagez(),
   ];
   @override
   Widget build(BuildContext context) {

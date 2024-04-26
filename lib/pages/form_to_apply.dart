@@ -1,347 +1,306 @@
-import 'dart:async';
-import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/pages/AccountInformation.dart';
-import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Personalinformation extends StatefulWidget {
   const Personalinformation({super.key});
 
   @override
-  State<Personalinformation> createState() => PersonalinformationState();
+  State<Personalinformation> createState() => _PersonalinformationState();
 }
 
-class PersonalinformationState extends State<Personalinformation> {
-  String fullname = "", dob = "", fatherName = "", address = "", gender = "", aadhar = "",ifsc = "",passport = "",loanAmount = "";
-  TextEditingController fullmamecontroller = TextEditingController();
-  TextEditingController dobcontroller = TextEditingController();
-  TextEditingController fatherNamecontroller = TextEditingController();
-  TextEditingController addresscontroller = TextEditingController();
-  TextEditingController gendercontroller = TextEditingController();
-  TextEditingController aadharcontroller = TextEditingController();
-  TextEditingController ifsccontroller = TextEditingController();
-  TextEditingController passportSizecontroller = TextEditingController();
-  TextEditingController loanAmountcontroller = TextEditingController();
+class _PersonalinformationState extends State<Personalinformation> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final _formkey = GlobalKey<FormState>();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "PERSONAL INFORMATION",
-          style: GoogleFonts.lato(fontSize: 16),
-        ),
-      ),
-      body:ListView(
-        children: [
-          Column(
-        children: [
-          const Text(
-              "here should have a male and female pincode also pan number and adhar"),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Form(
-              key: _formkey,
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 30.0),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFedf0f8),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Choose your Gender';
-                        }
-                        return null;
-                      },
-                      controller: gendercontroller,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Male",
-                          hintStyle: TextStyle(
-                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 30.0),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFedf0f8),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Fullname';
-                        }
-                        return null;
-                      },
-                      controller: fullmamecontroller,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Name",
-                          hintStyle: TextStyle(
-                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 30.0),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFedf0f8),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter dob';
-                        }
-                        return null;
-                      },
-                      controller: addresscontroller,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "address",
-                          hintStyle: TextStyle(
-                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                     Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 30.0),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFedf0f8),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter father name';
-                        }
-                        return null;
-                      },
-                      controller: fatherNamecontroller,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "farher name",
-                          hintStyle: TextStyle(
-                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 30.0),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFedf0f8),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextFormField(
-                      // validator: (value) {
-                      //   if (value == null || value.isEmpty) {
-                      //     return 'Please Enter father name';
-                      //   }
-                      //   return null;
-                      // },
-                      controller: dobcontroller,
-                      decoration: const InputDecoration(
-                          filled: true,
-                          prefixIcon: Icon(Icons.calendar_today),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                          ),
-                          border: InputBorder.none,
-                          hintText: "dob",
-                          hintStyle: TextStyle(
-                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                      readOnly: true,
-                      onTap: () {
-                        _selectDate();
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 30.0),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFedf0f8),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Aadhar Number';
-                        }
-                        return null;
-                      },
-                      controller: aadharcontroller,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Aadhar Number",
-                          hintStyle: TextStyle(
-                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 30.0),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFedf0f8),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter THE Correct IFSC code';
-                        }
-                        return null;
-                      },
-                      controller: ifsccontroller,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Loan Amount",
-                          hintStyle: TextStyle(
-                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 2.0, horizontal: 30.0),
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFedf0f8),
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please Enter Loan Amount';
-                        }
-                        return null;
-                      },
-                      controller: loanAmountcontroller,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Loan Amount",
-                          hintStyle: TextStyle(
-                              color: Color(0xFFb2b7bf), fontSize: 18.0)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                   
-                  
-                  FloatingActionButton(
-                    onPressed: _submitForm,
-                    child: const Icon(Icons.arrow_forward_ios_rounded),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-        ],
-      ) 
-      
-    );
-  }
-  
+  final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController fatherNameController = TextEditingController();
+  final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _aadharController = TextEditingController();
+  final TextEditingController _loanAmountController = TextEditingController();
+  final TextEditingController _ifscController = TextEditingController();
+  final TextEditingController _fatherNameController = TextEditingController();
 
-
-  Future<void> _selectDate() async {
-    DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
-    if (picked != null) {
-      setState(() {
-        dobcontroller.text = picked.toString().split(" ")[0];
-      });
-    }
-  }
-
-  Future<void> _submitForm() async {
-    if (_formkey.currentState!.validate()) {
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
       // Form is valid, proceed to save data to Firebase
       try {
-        showDialog(
-          context: context,
-          barrierDismissible: false, 
-          builder: (BuildContext context) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-        );
-
-        String? userId = FirebaseAuth.instance.currentUser?.uid;
-
-        // Perform form submission asynchronously
-        await Future.delayed(const Duration(seconds: 2));
-        await FirebaseFirestore.instance.collection('Applicant').add({
-          'userId':userId,
-          'fullName': fullmamecontroller.text,
-          'dob': dobcontroller.text,
-          'fatherName': fatherNamecontroller.text,
-          'address': addresscontroller.text,
-          'gender': gendercontroller.text,
-          'aadhar': aadharcontroller.text,
-          'ifsc': ifsccontroller.text,
-          'loanAmount': loanAmountcontroller.text,
+        await FirebaseFirestore.instance.collection('Applicant_name').add({
+          'name': _nameController.text,
+          'Gender': _genderController.text,
+          'Address': _addressController.text,
+          'Father_name': _fatherNameController.text,
+          'dob': _dobController.text,
+          'aadhar': _aadharController.text,
+          'Loan Amount': _loanAmountController.text,
+          'ifsc': _ifscController.text,
         });
-        // Clear form fields after successful submission
-        fullmamecontroller.clear();
-        dobcontroller.clear();
-        fatherNamecontroller.clear();
-        addresscontroller.clear();
-        gendercontroller.clear();
-        aadharcontroller.clear();
-        ifsccontroller.clear();
-        loanAmountcontroller.clear();
-        // navigate to a bank info
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const AccountInformation()));
-        // navigate to a bank info
 
-        // Optionally show a success message
+        // Clear form fields after successful submission
+        _nameController.clear();
+        _genderController.clear();
+        _addressController.clear();
+        _dobController.clear();
+        _aadharController.clear();
+        _loanAmountController.clear();
+        _ifscController.clear();
+        _fatherNameController.clear();
+
+        // Show a success message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Form submitted successfully')),
         );
       } catch (e) {
         // Handle errors
         print('Error submitting form: $e');
-        // Optionally show an error message
+        // Show an error message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content: Text('Error submitting form. Please try again later')),
         );
       }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: MainColors.body,
+      // male.name.address.fathername.dob.adharnumber.loanamount.IFSC code.
+      appBar: AppBar(
+        backgroundColor: MainColors.appbar,
+        title: const Text("PERSONAL INFORMATION",style: TextStyle(color: Colors.white),),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(context,MaterialPageRoute(builder: (context) => AccountInformation(),));
+          }, icon: Icon(Icons.notification_important))
+        ],
+      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      
+                      keyboardType: TextInputType.name,
+                      controller: _genderController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter your gender';
+                        }
+                        return null;
+                      },
+                      // ,hintStyle: TextStyle(color: Colors.white),
+                      // labelStyle: TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
+                        labelStyle: TextStyle(color: Colors.white),
+                          prefixIcon: Icon(Icons.person_2,color: Colors.white,),
+                          labelText: "Gender",
+                          hintText: 'Male',hintStyle: TextStyle(color: Colors.white),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _nameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
+                      hintStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.white),
+                        // labelStyle: TextStyle(color: Colors.white),
+                          labelText: 'Your Name',
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _addressController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
+                      hintStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.white),
+                          labelText: 'Your address',
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _fatherNameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your father name';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
+                      hintStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.white),
+                          labelText: 'Father\'s Name',
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _dobController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your date of birth';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
+                      hintStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.white),
+                          labelText: 'Date of Birth',
+                          hintText: 'dd/mm/yy',
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _aadharController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Adhar';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
+                        hintStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.white),
+                          labelText: 'Aadhar',
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _loanAmountController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Loan Amount';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
+                      hintStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.white),
+                          labelText: 'Loan Amount',
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _ifscController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter IFSC';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        
+                        hintStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.white),
+                          labelText: 'IFSC',
+                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      
+                      style: ElevatedButton.styleFrom(backgroundColor: MainColors.lightgreen,
+                        shape: RoundedRectangleBorder(),
+                      ),
+                      onPressed: _submitForm,
+                      child:  Text('Submit',style: TextStyle(color: Colors.white),),
+                    ),
+
+                    //   ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)) ),
+                    //   onPressed: _submitForm,
+                    //   child: const Text('Submit'),
+                    // ),
+                  ],
+                )),
+          )
+        ],
+      ),
+    );
   }
 }

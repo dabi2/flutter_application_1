@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/color/colors.dart';
@@ -14,6 +16,44 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String? userEmail;
+
+  // Function to retrieve email data of the current user from Firebase Firestore
+  Future<void> getCurrentUserEmail() async {
+    try {
+      // Get the current user
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        // Reference to the collection where user data is stored
+        CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+        // Get the document containing the current user's email
+        DocumentSnapshot documentSnapshot = await users.doc(user.uid).get();
+
+        // Extract the email from the document
+        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+        String email = data['email'];
+
+        // Update the userEmail variable
+        setState(() {
+          userEmail = email;
+        });
+      } else {
+        // User is not signed in
+        print('User is not signed in.');
+      }
+    } catch (e) {
+      print('Error retrieving email data: $e');
+    }
+  }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUserEmail();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,8 +115,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Text.rich(TextSpan(children: [
                 TextSpan(text: "Welcome back ",style: GoogleFonts.lato(fontSize:20,color:Colors.grey)),
-                TextSpan(text: "Kenneth.!",style: GoogleFonts.lato(fontSize:30,fontWeight:FontWeight.normal,color:Colors.blueGrey)),
+                TextSpan(text: "$userEmail !!",style: GoogleFonts.lato(fontSize:30,fontWeight:FontWeight.normal,color:Colors.blueGrey)),
               ])),
+              
               Divider(
                 color: MainColors.appbar,
                 indent: 50,

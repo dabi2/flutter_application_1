@@ -71,22 +71,29 @@ class ApplyloanState extends State<Applyloan> {
                           Card(
                             child: Column(
                               children: [
-                                Image.network(
-                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                                  height: 100,
-                                  width: 200,
-                                ),
-                                Text(
-                                  "HOME LOAN",
-                                  style: GoogleFonts.lato(fontSize: 20),
+                                // Image.network(
+                                //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                                //   height: 100,
+                                //   width: 200,
+                                // ),
+                                const Icon(Icons.home,size: 100,),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "HOME LOAN",
+                                    style: GoogleFonts.lato(fontSize: 20,),
+                                  ),
                                 ),
                                 ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(MainColors.lightgreen  )
+                                  ),
                                     onPressed: () {
                                        Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                     },
                                     child: Text(
                                       "Apply Now",
-                                      style: GoogleFonts.lato(fontSize: 16),
+                                      style: GoogleFonts.lato(fontSize: 16,color:Colors.black),
                                     )),
                                 const SizedBox(
                                   height: 10,
@@ -99,22 +106,29 @@ class ApplyloanState extends State<Applyloan> {
                       Card(
                         child: Column(
                           children: [
-                            Image.network(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                              height: 100,
-                              width: 200,
-                            ),
-                            Text(
-                              "EDUCATION LOAN",
-                              style: GoogleFonts.lato(fontSize: 20),
+                            // Image.network(
+                            //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                            //   height: 100,
+                            //   width: 200,
+                            // ),
+                            const Icon(Icons.school_rounded,size: 100,),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "EDUCATION LOAN",
+                                style: GoogleFonts.lato(fontSize: 20),
+                              ),
                             ),
                             ElevatedButton(
+                              style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(MainColors.lightgreen  )
+                                  ),
                                 onPressed: () {
                                   Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                 },
                                 child: Text(
                                   "Apply Now",
-                                  style: GoogleFonts.lato(fontSize: 16),
+                                  style: GoogleFonts.lato(fontSize: 16,color:Colors.black),
                                 )),
                             const SizedBox(
                               height: 10,
@@ -135,23 +149,31 @@ class ApplyloanState extends State<Applyloan> {
                           Card(
                             child: Column(
                               children: [
-                                Image.network(
-                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                                  height: 100,
-                                  width: 200,
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(Icons.car_rental_sharp,size: 100,),
                                 ),
-                                Text(
-                                  "CAR LOAN",
-                                  style: GoogleFonts.lato(fontSize: 20),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "CAR LOAN",
+                                    style: GoogleFonts.lato(fontSize: 20),
+                                  ),
                                 ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
-                                    },
-                                    child: Text(
-                                      "Apply Now",
-                                      style: GoogleFonts.lato(fontSize: 16),
-                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(MainColors.lightgreen  )
+                                  ),
+                                      onPressed: () {
+                                        Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
+                                      },
+                                      child: Text(
+                                        "Apply Now",
+                                        style: GoogleFonts.lato(fontSize: 16,color:Colors.black),
+                                      )),
+                                ),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -163,22 +185,29 @@ class ApplyloanState extends State<Applyloan> {
                       Card(
                         child: Column(
                           children: [
-                            Image.network(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                              height: 100,
-                              width: 200,
-                            ),
-                            Text(
-                              "PERSONAL LOAN",
-                              style: GoogleFonts.lato(fontSize: 20),
+                            const Icon(Icons.person_pin,size: 100,),
+                            // Image.network(
+                            //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                            //   height: 100,
+                            //   width: 200,
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "PERSONAL LOAN",
+                                style: GoogleFonts.lato(fontSize: 20),
+                              ),
                             ),
                             ElevatedButton(
+                              style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(MainColors.lightgreen  )
+                                  ),
                                 onPressed: () {
                                   Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                 },
                                 child: Text(
                                   "Apply Now",
-                                  style: GoogleFonts.lato(fontSize: 16),
+                                  style: GoogleFonts.lato(fontSize: 16,color:Colors.black),
                                 )),
                             const SizedBox(
                               height: 10,
@@ -199,22 +228,29 @@ class ApplyloanState extends State<Applyloan> {
                           Card(
                             child: Column(
                               children: [
-                                Image.network(
-                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                                  height: 100,
-                                  width: 200,
-                                ),
-                                Text(
-                                  "INSTANT LOAN",
-                                  style: GoogleFonts.lato(fontSize: 20),
+                                const Icon(Icons.money,size: 100,),
+                                // Image.network(
+                                //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                                //   height: 100,
+                                //   width: 200,
+                                // ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "INSTANT LOAN",
+                                    style: GoogleFonts.lato(fontSize: 20),
+                                  ),
                                 ),
                                 ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(MainColors.lightgreen)
+                                  ),
                                     onPressed: () {
                                       Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                     },
                                     child: Text(
                                       "Apply Now",
-                                      style: GoogleFonts.lato(fontSize: 16),
+                                      style: GoogleFonts.lato(fontSize: 16,color:Colors.black),
                                     )),
                                 const SizedBox(
                                   height: 10,
@@ -227,22 +263,29 @@ class ApplyloanState extends State<Applyloan> {
                       Card(
                         child: Column(
                           children: [
-                            Image.network(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
-                              height: 100,
-                              width: 200,
-                            ),
-                            Text(
-                              "car loan",
-                              style: GoogleFonts.lato(fontSize: 20),
+                            const Icon(Icons.person_2,size: 100,),
+                            // Image.network(
+                            //   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQemhFo8i7iiUqufN6ELV52w4TEfAKTFYR_mJlRy0S2wQ&s",
+                            //   height: 100,
+                            //   width: 200,
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "PERSONAL LOAN",
+                                style: GoogleFonts.lato(fontSize: 20),
+                              ),
                             ),
                             ElevatedButton(
+                              style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(MainColors.lightgreen  )
+                                  ),
                                 onPressed: () {
                                   Navigator.push(context,MaterialPageRoute(builder: (context) =>const Personalinformation()));
                                 },
                                 child: Text(
                                   "Apply Now",
-                                  style: GoogleFonts.lato(fontSize: 16),
+                                  style: GoogleFonts.lato(fontSize: 16,color:Colors.black),
                                 )),
                             const SizedBox(
                               height: 10,
