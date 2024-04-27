@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
+import 'package:flutter_application_1/form_submission_status.dart/submission_status.dart';
 import 'package:flutter_application_1/pages/AccountInformation.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,6 +16,7 @@ class Personalinformation extends StatefulWidget {
 }
 
 class _PersonalinformationState extends State<Personalinformation> {
+  bool isFormSubmitted = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _genderController = TextEditingController();
@@ -29,6 +31,9 @@ class _PersonalinformationState extends State<Personalinformation> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
+      checkFormSubmissionStatus(context, () {
+        _submitForm();
+       });
       // Form is valid, proceed to save data to Firebase
       try {
         await FirebaseFirestore.instance.collection('Applicant_name').add({
@@ -51,7 +56,14 @@ class _PersonalinformationState extends State<Personalinformation> {
         _loanAmountController.clear();
         _ifscController.clear();
         _fatherNameController.clear();
-
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AccountInformation(isFormSubmitted: isFormSubmitted,),
+            ));
+            setState(() {
+              isFormSubmitted = true;
+            });
         // Show a success message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Form submitted successfully')),
@@ -75,11 +87,20 @@ class _PersonalinformationState extends State<Personalinformation> {
       // male.name.address.fathername.dob.adharnumber.loanamount.IFSC code.
       appBar: AppBar(
         backgroundColor: MainColors.appbar,
-        title: const Text("PERSONAL INFORMATION",style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "PERSONAL INFORMATION",
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
-          IconButton(onPressed: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context) => AccountInformation(),));
-          }, icon: Icon(Icons.notification_important))
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AccountInformation(isFormSubmitted: isFormSubmitted,),
+                    ));
+              },
+              icon: Icon(Icons.notification_important))
         ],
       ),
       body: ListView(
@@ -91,7 +112,6 @@ class _PersonalinformationState extends State<Personalinformation> {
                 child: Column(
                   children: [
                     TextFormField(
-                      
                       keyboardType: TextInputType.name,
                       controller: _genderController,
                       validator: (value) {
@@ -103,11 +123,17 @@ class _PersonalinformationState extends State<Personalinformation> {
                       // ,hintStyle: TextStyle(color: Colors.white),
                       // labelStyle: TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
-                        labelStyle: TextStyle(color: Colors.white),
-                          prefixIcon: Icon(Icons.person_2,color: Colors.white,),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 77, 68, 68))),
+                          labelStyle: TextStyle(color: Colors.white),
+                          prefixIcon: Icon(
+                            Icons.person_2,
+                            color: Colors.white,
+                          ),
                           labelText: "Gender",
-                          hintText: 'Male',hintStyle: TextStyle(color: Colors.white),
+                          hintText: 'Male',
+                          hintStyle: TextStyle(color: Colors.white),
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
@@ -127,10 +153,12 @@ class _PersonalinformationState extends State<Personalinformation> {
                         return null;
                       },
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
-                      hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(color: Colors.white),
-                        // labelStyle: TextStyle(color: Colors.white),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 77, 68, 68))),
+                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
+                          // labelStyle: TextStyle(color: Colors.white),
                           labelText: 'Your Name',
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -151,9 +179,11 @@ class _PersonalinformationState extends State<Personalinformation> {
                         return null;
                       },
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
-                      hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(color: Colors.white),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 77, 68, 68))),
+                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
                           labelText: 'Your address',
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -174,9 +204,11 @@ class _PersonalinformationState extends State<Personalinformation> {
                         return null;
                       },
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
-                      hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(color: Colors.white),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 77, 68, 68))),
+                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
                           labelText: 'Father\'s Name',
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -197,9 +229,11 @@ class _PersonalinformationState extends State<Personalinformation> {
                         return null;
                       },
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
-                      hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(color: Colors.white),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 77, 68, 68))),
+                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
                           labelText: 'Date of Birth',
                           hintText: 'dd/mm/yy',
                           focusedBorder: OutlineInputBorder(
@@ -221,9 +255,11 @@ class _PersonalinformationState extends State<Personalinformation> {
                         return null;
                       },
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
-                        hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(color: Colors.white),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 77, 68, 68))),
+                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
                           labelText: 'Aadhar',
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -244,9 +280,11 @@ class _PersonalinformationState extends State<Personalinformation> {
                         return null;
                       },
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 77, 68, 68))),
-                      hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(color: Colors.white),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 77, 68, 68))),
+                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
                           labelText: 'Loan Amount',
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -267,11 +305,11 @@ class _PersonalinformationState extends State<Personalinformation> {
                         return null;
                       },
                       decoration: const InputDecoration(
-                        
-                        hintStyle: TextStyle(color: Colors.white),
-                      labelStyle: TextStyle(color: Colors.white),
+                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
                           labelText: 'IFSC',
-                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
@@ -283,12 +321,15 @@ class _PersonalinformationState extends State<Personalinformation> {
                       height: 10,
                     ),
                     ElevatedButton(
-                      
-                      style: ElevatedButton.styleFrom(backgroundColor: MainColors.lightgreen,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MainColors.lightgreen,
                         shape: RoundedRectangleBorder(),
                       ),
                       onPressed: _submitForm,
-                      child:  Text('Submit',style: TextStyle(color: Colors.white),),
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
 
                     //   ElevatedButton(

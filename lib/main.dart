@@ -8,6 +8,7 @@ import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
 import 'package:flutter_application_1/pages/form_to_apply.dart';
 import 'package:flutter_application_1/pages/homepage.dart';
+import 'package:flutter_application_1/pages/interest_rate_page.dart';
 import 'package:flutter_application_1/pages/profilepage.dart';
 import 'package:flutter_application_1/razor_pay/razorpay.dart';
 
@@ -44,7 +45,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LogIn(),
+      debugShowCheckedModeBanner: false,
+      home:  const LogIn(),
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:flutter_application_1/pages/drawer.dart';
+import 'package:flutter_application_1/pages/eligibilities.dart';
+import 'package:flutter_application_1/pages/interest_rate_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -298,7 +300,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                         height: 10,
                                       ),
                                       ElevatedButton.icon(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(context,MaterialPageRoute(builder: (context) => borrowerEligibilityPage(),));
+                                          },
                                           style: ButtonStyle(
                                               backgroundColor:
                                                   MaterialStatePropertyAll(
@@ -313,7 +317,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             Icons.arrow_forward,
                                             color: Colors.white,
                                           ),
-                                          label: Text("Know More",
+                                          label: Text("Know More1",
                                               style: GoogleFonts.lato(
                                                 fontSize: 16,
                                                 fontWeight:FontWeight.bold,
@@ -346,7 +350,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                         height: 10,
                                       ),
                                       ElevatedButton.icon(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context, MaterialPageRoute(builder: (context) => interestRatePage(),)
+                                            );
+                                          },
                                           style: ButtonStyle(
                                               backgroundColor:
                                                   MaterialStatePropertyAll(
@@ -361,7 +369,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             Icons.arrow_forward,
                                             color: Colors.white,
                                           ),
-                                          label: Text("Know More",
+                                          label: Text("Know More2",
                                               style: GoogleFonts.lato(
                                                 fontSize: 16,
                                                 fontWeight:FontWeight.bold,
