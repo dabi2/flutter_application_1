@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/pages/drawer.dart';
+import 'package:flutter_application_1/pages/payment.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Loanpage extends StatefulWidget {
@@ -105,8 +106,8 @@ class LloanpageState extends State<Loanpage> {
                         style: const TextStyle(color: Colors.white),
                         controller: _principalAmount,
                         decoration: InputDecoration(
-                          counterStyle: const TextStyle(color: Colors.red),
-                          prefixStyle: const TextStyle(color: Colors.red),
+                            counterStyle: const TextStyle(color: Colors.red),
+                            prefixStyle: const TextStyle(color: Colors.red),
                             suffixIcon: const Align(
                               widthFactor: 1.0,
                               heightFactor: 1.0,
@@ -174,7 +175,8 @@ class LloanpageState extends State<Loanpage> {
                                       borderSide: BorderSide(
                                           color: MainColors.lightgreen)),
                                   labelText: "Tenure",
-                                  labelStyle: const TextStyle(color: Colors.white),
+                                  labelStyle:
+                                      const TextStyle(color: Colors.white),
                                   border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.white))),
@@ -191,7 +193,7 @@ class LloanpageState extends State<Loanpage> {
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 Switch(
-                                  activeColor: Colors.green,
+                                    activeColor: Colors.green,
                                     value: _switchValue,
                                     onChanged: (bool value) {
                                       print(value);
@@ -305,11 +307,11 @@ class LloanpageState extends State<Loanpage> {
                           ),
                           ElevatedButton(
                               onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const Paymentmode()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PaymentMode()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green[700],
@@ -391,11 +393,11 @@ class LloanpageState extends State<Loanpage> {
                           ),
                           ElevatedButton(
                               onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const Paymentmode()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PaymentMode()));
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green[700],
@@ -503,6 +505,7 @@ class LloanpageState extends State<Loanpage> {
     );
   }
 
+// Amortization Formula
   void _handleCalculation() {
     double A = 0.0;
     int P = int.parse(_principalAmount.text);

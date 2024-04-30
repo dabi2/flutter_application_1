@@ -8,6 +8,7 @@ import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:flutter_application_1/pages/drawer.dart';
 import 'package:flutter_application_1/pages/eligibilities.dart';
 import 'package:flutter_application_1/pages/interest_rate_page.dart';
+import 'package:flutter_application_1/pages/notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -73,10 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => const Notifications()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NotificationsPage()));
             },
             icon: const Icon(
               Icons.notifications,
