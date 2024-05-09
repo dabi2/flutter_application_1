@@ -1,11 +1,14 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/form_submission_status.dart/submission_status.dart';
 import 'package:flutter_application_1/pages/AccountInformation.dart';
+import 'package:flutter_application_1/pages/apply_loan.dart';
+import 'package:flutter_application_1/pages/limitsubmisssion.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Personalinformation extends StatefulWidget {
@@ -29,14 +32,48 @@ class _PersonalinformationState extends State<Personalinformation> {
   final TextEditingController _ifscController = TextEditingController();
   final TextEditingController _fatherNameController = TextEditingController();
 
-  void _submitForm() async {
+
+void _submitForm() async {
+  // Check if the user is authenticated
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    // User is not authenticated, handle accordingly
+    print('User is not authenticated');
+    return;
+  }
+
+  String userId = user.uid;
+
+  // Check if the form has already been submitted
+  bool formSubmitted = await hasUserSubmittedFormOnce(userId);
+
+  if (formSubmitted) {
+    // Form has already been submitted, show warning message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Warning'),
+          content: Text('You have already submitted the form. You can only submit it once.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Navigator.of(context).pop();
+                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Applyloan(),));
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+    // Form has not been submitted, proceed with form submission
     if (_formKey.currentState!.validate()) {
-      checkFormSubmissionStatus(context, () {
-        _submitForm();
-       });
       // Form is valid, proceed to save data to Firebase
       try {
         await FirebaseFirestore.instance.collection('Applicant_name').add({
+          'userId': userId, // Include the userId in the document
           'name': _nameController.text,
           'Gender': _genderController.text,
           'Address': _addressController.text,
@@ -56,14 +93,15 @@ class _PersonalinformationState extends State<Personalinformation> {
         _loanAmountController.clear();
         _ifscController.clear();
         _fatherNameController.clear();
+
+        // Navigate to the next page
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AccountInformation(isFormSubmitted: isFormSubmitted,),
-            ));
-            setState(() {
-              isFormSubmitted = true;
-            });
+          context,
+          MaterialPageRoute(
+            builder: (context) => AccountInformation(isFormSubmitted: true),
+          ),
+        );
+
         // Show a success message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Form submitted successfully')),
@@ -74,11 +112,15 @@ class _PersonalinformationState extends State<Personalinformation> {
         // Show an error message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content: Text('Error submitting form. Please try again later')),
+            content: Text('Error submitting form. Please try again later'),
+          ),
         );
       }
     }
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {

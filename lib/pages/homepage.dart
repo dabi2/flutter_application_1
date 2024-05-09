@@ -379,54 +379,56 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ],
                                   ),
                                 ),
-                                Card(
-                                  child: Column(
-                                    children: [
-                                      Image.asset(
-                                        "images/coins.png",
-                                        height: 100,
-                                        width: 100,
-                                      ),
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            const WidgetSpan(child: Icon(Icons.file_copy_rounded,size: 20,color: Colors.grey,)),
-                                            TextSpan(text: 'Documentation',
-                                              style: GoogleFonts.lato(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                              )),
-                                          ],
-                                        ),
-                                      ),
-                                     const SizedBox(
-                                        height: 10,
-                                      ),
-                                      ElevatedButton.icon(
-                                          onPressed: () {},
-                                          style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStatePropertyAll(
-                                                      MainColors.lightgreen),
-                                              shape: MaterialStateProperty.all<
-                                                      RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5.0)))),
-                                          icon: const Icon(
-                                            Icons.arrow_forward,
-                                            color: Colors.white,
-                                          ),
-                                          label: Text("Know More",
-                                              style: GoogleFonts.lato(
-                                                fontWeight:FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                              ))),
-                                    ],
-                                  ),
-                                ),
+                                // Card(
+                                //   child: Column(
+                                //     children: [
+                                //       Image.asset(
+                                //         "images/coins.png",
+                                //         height: 100,
+                                //         width: 100,
+                                //       ),
+                                //       Text.rich(
+                                //         TextSpan(
+                                //           children: [
+                                //             const WidgetSpan(child: Icon(Icons.file_copy_rounded,size: 20,color: Colors.grey,)),
+                                //             TextSpan(text: 'Documentation',
+                                //               style: GoogleFonts.lato(
+                                //                 fontSize: 16,
+                                //                 color: Colors.black87,
+                                //               )),
+                                //           ],
+                                //         ),
+                                //       ),
+                                //      const SizedBox(
+                                //         height: 10,
+                                //       ),
+                                //       ElevatedButton.icon(
+                                //           onPressed: () {
+                                //             Navigator.push(context,MaterialPageRoute(builder: (context) => LoanApplicationForm() ,));
+                                //           },
+                                //           style: ButtonStyle(
+                                //               backgroundColor:
+                                //                   MaterialStatePropertyAll(
+                                //                       MainColors.lightgreen),
+                                //               shape: MaterialStateProperty.all<
+                                //                       RoundedRectangleBorder>(
+                                //                   RoundedRectangleBorder(
+                                //                       borderRadius:
+                                //                           BorderRadius.circular(
+                                //                               5.0)))),
+                                //           icon: const Icon(
+                                //             Icons.arrow_forward,
+                                //             color: Colors.white,
+                                //           ),
+                                //           label: Text("Know More",
+                                //               style: GoogleFonts.lato(
+                                //                 fontWeight:FontWeight.bold,
+                                //                 fontSize: 16,
+                                //                 color: Colors.white,
+                                //               ))),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
