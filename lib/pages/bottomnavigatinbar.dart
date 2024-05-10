@@ -16,7 +16,6 @@ class _MybottomnavigationbarState extends State<Mybottomnavigationbar> {
   int currentIndex = 0;
   final screens = [
     const MyHomePage(),
-    // const Loanpage(),
     const Loanpage(),
     const Profilepagez(),
   ];

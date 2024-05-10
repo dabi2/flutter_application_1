@@ -102,11 +102,11 @@ class _ProfilepagezState extends State<Profilepagez> {
                               radius: 50,
                               child: Icon(Icons.person,size: 90,),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text("${data['name']}",style: const TextStyle(fontSize: 20,color: Colors.white),),const SizedBox(height: 10,),
-                            Divider(
+                            const Divider(
                               indent: 150,
                               endIndent: 150,
                               color: Colors.grey,

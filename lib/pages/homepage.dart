@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:flutter_application_1/pages/drawer.dart';
@@ -22,18 +21,20 @@ class _MyHomePageState extends State<MyHomePage> {
   String? userEmail;
 
   // Function to retrieve email data of the current user from Firebase Firestore
-  Future<void> getCurrentUserEmail() async {
-    try {
-      // Get the current user
-      User? user = FirebaseAuth.instance.currentUser;
+Future<void> getCurrentUserEmail() async {
+  try {
+    // Get the current user
+    User? user = FirebaseAuth.instance.currentUser;
 
-      if (user != null) {
-        // Reference to the collection where user data is stored
-        CollectionReference users = FirebaseFirestore.instance.collection('users');
+    if (user != null) {
+      // Reference to the collection where user data is stored
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-        // Get the document containing the current user's email
-        DocumentSnapshot documentSnapshot = await users.doc(user.uid).get();
+      // Get the document containing the current user's email
+      DocumentSnapshot documentSnapshot = await users.doc(user.uid).get();
 
+      // Check if the document exists
+      if (documentSnapshot.exists) {
         // Extract the email from the document
         Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
         String email = data['email'];
@@ -43,19 +44,18 @@ class _MyHomePageState extends State<MyHomePage> {
           userEmail = email;
         });
       } else {
-        // User is not signed in
-        print('User is not signed in.');
+        // Document does not exist
+        print('Document does not exist for user ID: ${user.uid}');
       }
-    } catch (e) {
-      print('Error retrieving email data: $e');
+    } else {
+      // User is not signed in
+      print('User is not signed in.');
     }
+  } catch (e) {
+    print('Error retrieving email data: $e');
   }
-@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getCurrentUserEmail();
-  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +128,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  // boxShadow:List.filled(growable: bool.hasEnvironment(String), fill),
                   border: const Border(top: BorderSide.none),
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
@@ -251,7 +250,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.all(20.0),
                 child: Container(
                     decoration: BoxDecoration(
-                      // boxShadow:List.filled(growable: bool.hasEnvironment(String), fill),
                       border: const Border(top: BorderSide.none),
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20),

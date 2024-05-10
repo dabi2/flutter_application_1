@@ -2,14 +2,11 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
-import 'package:flutter_application_1/form_submission_status.dart/submission_status.dart';
 import 'package:flutter_application_1/pages/AccountInformation.dart';
 import 'package:flutter_application_1/pages/apply_loan.dart';
 import 'package:flutter_application_1/pages/limitsubmisssion.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Personalinformation extends StatefulWidget {
   const Personalinformation({super.key});
