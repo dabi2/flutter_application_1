@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/pages/drawer.dart';
@@ -10,10 +11,11 @@ class Loanpage extends StatefulWidget {
   const Loanpage({super.key});
 
   @override
-  State<Loanpage> createState() => LloanpageState();
+  State<Loanpage> createState() => LoanpageState();
 }
 
-class LloanpageState extends State<Loanpage> {
+
+class LoanpageState extends State<Loanpage> {
   final List _tenureTypes = ["Month(s)", "Year(s)"];
   String _tenureType = "Year(s)";
   String _emiResult = "";
@@ -64,124 +66,131 @@ class LloanpageState extends State<Loanpage> {
         elevation: 100,
       ),
       drawer: Drawerclass().buildDrawer(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            const Center(
-              child: Column(
-                children: [
-                  Text(
-                    "your Total Loan Amount is: \u20B910,000",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  Text(
-                    "you don't have any active loan Amount",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  )
-                ],
-              ),
-            ),
-            Divider(
-              color: MainColors.lightcontainer,
-              endIndent: 50,
-              indent: 50,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: MainColors.containercolor,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: TextField(
-                        style: const TextStyle(color: Colors.white),
-                        controller: _principalAmount,
-                        decoration: InputDecoration(
-                            counterStyle: const TextStyle(color: Colors.red),
-                            prefixStyle: const TextStyle(color: Colors.red),
-                            suffixIcon: const Align(
-                              widthFactor: 1.0,
-                              heightFactor: 1.0,
-                              child: Icon(
-                                Icons.currency_rupee_rounded,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: MainColors.lightgreen)),
-                            labelText: "Enter Principal Amount",
-                            labelStyle: const TextStyle(color: Colors.white),
-                            border: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white))),
-                        keyboardType: TextInputType.number,
-                      ),
+      body: FutureBuilder<QuerySnapshot>(
+        future: FirebaseFirestore.instance.collection('Applicant_name').get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text('No loan applications found.'),
+            );
+          }
+
+          // Display loan application details
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              var data =
+                  snapshot.data!.docs[index].data() as Map<String, dynamic>;
+              return ListTile(
+                title: Center(
+                    child: Card(
+                  color: MainColors.lightgreen,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Current loan Amount is \u20B9${data['Loan Amount']}",
+                      style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: TextField(
-                        style: const TextStyle(color: Colors.white),
-                        controller: _interestRate,
-                        decoration: InputDecoration(
+                  ),
+                )),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      style: const TextStyle(color: Colors.white),
+                      controller: _principalAmount,
+                      decoration: InputDecoration(
+                          counterStyle: const TextStyle(color: Colors.red),
+                          prefixStyle: const TextStyle(color: Colors.red),
                           suffixIcon: const Align(
                             widthFactor: 1.0,
                             heightFactor: 1.0,
                             child: Icon(
-                              Icons.percent_rounded,
+                              Icons.currency_rupee_rounded,
                               color: Colors.grey,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: MainColors.lightgreen)),
-                          labelText: "Interest Rate",
+                          labelText: "Enter Principal Amount",
                           labelStyle: const TextStyle(color: Colors.white),
                           border: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
-                          fillColor: Colors.amber,
+                              borderSide: BorderSide(color: Colors.white))),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      style: const TextStyle(color: Colors.white),
+                      controller: _interestRate,
+                      decoration: InputDecoration(
+                        suffixIcon: const Align(
+                          widthFactor: 1.0,
+                          heightFactor: 1.0,
+                          child: Icon(
+                            Icons.percent_rounded,
+                            color: Colors.grey,
+                          ),
                         ),
-                        keyboardType: TextInputType.number,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: MainColors.lightgreen)),
+                        labelText: "Interest Rate",
+                        labelStyle: const TextStyle(color: Colors.white),
+                        border: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white)),
+                        fillColor: Colors.amber,
                       ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Row(
                       children: [
                         Flexible(
                           flex: 4,
                           fit: FlexFit.tight,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: TextField(
-                              style: const TextStyle(color: Colors.white),
-                              controller: _tenure,
-                              decoration: InputDecoration(
-                                  suffixIcon: const Align(
-                                    widthFactor: 1.0,
-                                    heightFactor: 1.0,
-                                    child: Icon(
-                                      Icons.calendar_month_rounded,
-                                      color: Colors.grey,
-                                    ),
+                          child: TextField(
+                            style: const TextStyle(color: Colors.white),
+                            controller: _tenure,
+                            decoration: InputDecoration(
+                                suffixIcon: const Align(
+                                  widthFactor: 1.0,
+                                  heightFactor: 1.0,
+                                  child: Icon(
+                                    Icons.calendar_month_rounded,
+                                    color: Colors.grey,
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: MainColors.lightgreen)),
-                                  labelText: "Tenure",
-                                  labelStyle:
-                                      const TextStyle(color: Colors.white),
-                                  border: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white))),
-                              keyboardType: TextInputType.number,
-                            ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: MainColors.lightgreen)),
+                                labelText: "Tenure",
+                                labelStyle:
+                                    const TextStyle(color: Colors.white),
+                                border: const OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.white))),
+                            keyboardType: TextInputType.number,
                           ),
                         ),
                         Flexible(
@@ -213,294 +222,118 @@ class LloanpageState extends State<Loanpage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextButton(
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  5.0), // Adjust border radius as needed
+                    Center(
+                      child: TextButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    5.0), // Adjust border radius as needed
+                              ),
                             ),
+                            backgroundColor: MaterialStatePropertyAll(
+                                MainColors.lightcontainer)),
+                        onPressed: _handleCalculation,
+                        child: const Text(
+                          "Calculate",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          backgroundColor: MaterialStatePropertyAll(
-                              MainColors.lightcontainer)),
-                      onPressed: _handleCalculation,
-                      child: const Text(
-                        "Calculate",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
                         ),
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    emiResultsWidget(_emiResult)
+                    Center(
+                        child: Container(child: emiResultsWidget(_emiResult))),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: MainColors.lightcontainer),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    // const Icon(
+                                    //   Icons.house_siding,
+                                    //   color: Colors.white,
+                                    //   size: 23,
+                                    // ),
+                                    Text(
+                                      '${data['loanType']}',
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.calendar_month_sharp,
+                                      color: Colors.white,
+                                      size: 15,
+                                    ),
+                                    Text(
+                                      'From Date: ${data['fromDate']}',
+                                      style: const TextStyle(
+                                          fontSize: 12, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const Divider(
+                              indent: 5,
+                              color: Colors.grey,
+                              endIndent: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Amount: \u20B9 ${data["Loan Amount"]}',
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const PaymentMode()));
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green[700],
+                                    ),
+                                    child: const Text(
+                                      'Pay Now',
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                  color: MainColors.lightcontainer,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.car_rental,
-                                color: Colors.white,
-                                size: 23,
-                              ),
-                              Text(
-                                'Car Loan',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_month_sharp,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                              Text(
-                                'Due date 12/02/2024',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const Divider(
-                        indent: 5,
-                        color: Colors.grey,
-                        endIndent: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Amount: \u20B9 50,000',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PaymentMode()));
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green[700],
-                              ),
-                              child: const Text(
-                                'Pay Now',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                  color: MainColors.lightcontainer,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.house_siding,
-                                color: Colors.white,
-                                size: 23,
-                              ),
-                              Text(
-                                'Housing Loan',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_month_sharp,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                              Text(
-                                'Due date 12/02/2024',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const Divider(
-                        indent: 5,
-                        color: Colors.grey,
-                        endIndent: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Amount: \u20B9 50,000',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PaymentMode()));
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green[700],
-                              ),
-                              child: const Text(
-                                'Pay Now',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                  color: MainColors.lightcontainer,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.school_outlined,
-                                color: Colors.white,
-                                size: 23,
-                              ),
-                              Text(
-                                'Education Loan',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_month_sharp,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                              Text(
-                                'Due date 12/02/2024',
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const Divider(
-                        indent: 5,
-                        color: Colors.grey,
-                        endIndent: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Amount: \u20B9 50,000',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             const Paymentmode()));
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green[700],
-                              ),
-                              child: const Text(
-                                'Pay Now',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+              );
+            },
+          );
+        },
       ),
     );
   }

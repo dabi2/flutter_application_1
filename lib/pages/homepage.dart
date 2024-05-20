@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_application_1/pages/drawer.dart';
 import 'package:flutter_application_1/pages/eligibilities.dart';
 import 'package:flutter_application_1/pages/interest_rate_page.dart';
 import 'package:flutter_application_1/pages/notifications.dart';
+import 'package:flutter_application_1/pages/test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -18,44 +18,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String? userEmail;
-
-  // Function to retrieve email data of the current user from Firebase Firestore
-Future<void> getCurrentUserEmail() async {
-  try {
-    // Get the current user
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      // Reference to the collection where user data is stored
-      CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-      // Get the document containing the current user's email
-      DocumentSnapshot documentSnapshot = await users.doc(user.uid).get();
-
-      // Check if the document exists
-      if (documentSnapshot.exists) {
-        // Extract the email from the document
-        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-        String email = data['email'];
-
-        // Update the userEmail variable
-        setState(() {
-          userEmail = email;
-        });
-      } else {
-        // Document does not exist
-        print('Document does not exist for user ID: ${user.uid}');
-      }
-    } else {
-      // User is not signed in
-      print('User is not signed in.');
-    }
-  } catch (e) {
-    print('Error retrieving email data: $e');
+  String currentUserName = "User";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getCurrentUser();
   }
-}
-
+  void _getCurrentUser(){
+     User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        currentUserName = user.displayName ?? "User"; // Use display name or default to "User"
+      });
+    }
+  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +85,15 @@ Future<void> getCurrentUserEmail() async {
               const SizedBox(
                 height: 10,
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoanApplicationDetailsPage(),
+                        ));
+                  },
+                  child: const Text("next")),
               const Center(
                 child: CircleAvatar(
                   radius: 40,
@@ -117,15 +104,22 @@ Future<void> getCurrentUserEmail() async {
                 ),
               ),
               Text.rich(TextSpan(children: [
-                TextSpan(text: "Welcome back ",style: GoogleFonts.lato(fontSize:20,color:Colors.grey)),
-                TextSpan(text: "$userEmail !!",style: GoogleFonts.lato(fontSize:30,fontWeight:FontWeight.normal,color:Colors.blueGrey)),
+                TextSpan(
+                    text: " Welcome Back $currentUserName",
+                    style: GoogleFonts.lato(fontSize: 20, color: Colors.grey)),
+                TextSpan(
+                    text: " !!",
+                    style: GoogleFonts.lato(
+                        fontSize: 30,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.blueGrey)),
               ])),
-              
               Divider(
                 color: MainColors.appbar,
                 indent: 50,
                 endIndent: 50,
               ),
+              
               Container(
                 decoration: BoxDecoration(
                   border: const Border(top: BorderSide.none),
@@ -159,7 +153,10 @@ Future<void> getCurrentUserEmail() async {
                       ),
                       ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.push(context,MaterialPageRoute(builder: (context) =>Applyloan()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Applyloan()));
                         },
                         icon: const Icon(
                           Icons.monetization_on_rounded,
@@ -198,7 +195,7 @@ Future<void> getCurrentUserEmail() async {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset(
-                        "images/coins.png",
+                        "assets/images/coins.png",
                         height: 100,
                         width: 100,
                       ),
@@ -218,9 +215,7 @@ Future<void> getCurrentUserEmail() async {
                                     fontSize: 16,
                                     color: Colors.white,
                                   ))),
-                        ],
-                      ),
-                      ElevatedButton.icon(
+                                  ElevatedButton.icon(
                           onPressed: () {},
                           style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
@@ -234,11 +229,14 @@ Future<void> getCurrentUserEmail() async {
                             Icons.arrow_forward,
                             color: Colors.white,
                           ),
-                          label: Text("Check Your Sore",
+                          label: Text("Check Your Score",
                               style: GoogleFonts.lato(
                                 fontSize: 16,
                                 color: Colors.white,
                               ))),
+                        ],
+                      ),
+                      
                       const SizedBox(
                         width: 20,
                       )
@@ -279,19 +277,25 @@ Future<void> getCurrentUserEmail() async {
                                   child: Column(
                                     children: [
                                       Image.asset(
-                                        "images/coins.png",
+                                        "assets/images/coins.png",
                                         height: 100,
                                         width: 100,
                                       ),
                                       Text.rich(
                                         TextSpan(
                                           children: [
-                                            const WidgetSpan(child: Icon(Icons.access_time_filled_sharp,size: 20,color: Colors.grey,)),
-                                            TextSpan(text: 'Eligibility',
-                                              style: GoogleFonts.lato(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                              )),
+                                            const WidgetSpan(
+                                                child: Icon(
+                                              Icons.access_time_filled_sharp,
+                                              size: 20,
+                                              color: Colors.grey,
+                                            )),
+                                            TextSpan(
+                                                text: 'Eligibility',
+                                                style: GoogleFonts.lato(
+                                                  fontSize: 16,
+                                                  color: Colors.black87,
+                                                )),
                                           ],
                                         ),
                                       ),
@@ -300,7 +304,12 @@ Future<void> getCurrentUserEmail() async {
                                       ),
                                       ElevatedButton.icon(
                                           onPressed: () {
-                                            Navigator.push(context,MaterialPageRoute(builder: (context) => borrowerEligibilityPage(),));
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      borrowerEligibilityPage(),
+                                                ));
                                           },
                                           style: ButtonStyle(
                                               backgroundColor:
@@ -319,7 +328,7 @@ Future<void> getCurrentUserEmail() async {
                                           label: Text("Know More1",
                                               style: GoogleFonts.lato(
                                                 fontSize: 16,
-                                                fontWeight:FontWeight.bold,
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.white,
                                               ))),
                                     ],
@@ -329,30 +338,39 @@ Future<void> getCurrentUserEmail() async {
                                   child: Column(
                                     children: [
                                       Image.asset(
-                                        "images/coins.png",
+                                        "assets/images/coins.png",
                                         height: 100,
                                         width: 100,
                                       ),
                                       Text.rich(
                                         TextSpan(
                                           children: [
-                                            const WidgetSpan(child: Icon(Icons.percent_rounded,size: 20,color: Colors.grey,)),
-                                            TextSpan(text: 'Interest Rate',
-                                              style: GoogleFonts.lato(
-                                                fontSize: 16,
-                                                color: Colors.black87,
-                                              )),
+                                            const WidgetSpan(
+                                                child: Icon(
+                                              Icons.percent_rounded,
+                                              size: 20,
+                                              color: Colors.grey,
+                                            )),
+                                            TextSpan(
+                                                text: 'Interest Rate',
+                                                style: GoogleFonts.lato(
+                                                  fontSize: 16,
+                                                  color: Colors.black87,
+                                                )),
                                           ],
                                         ),
                                       ),
-                                     const SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       ElevatedButton.icon(
                                           onPressed: () {
                                             Navigator.push(
-                                              context, MaterialPageRoute(builder: (context) => interestRatePage(),)
-                                            );
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      interestRatePage(),
+                                                ));
                                           },
                                           style: ButtonStyle(
                                               backgroundColor:
@@ -371,7 +389,7 @@ Future<void> getCurrentUserEmail() async {
                                           label: Text("Know More2",
                                               style: GoogleFonts.lato(
                                                 fontSize: 16,
-                                                fontWeight:FontWeight.bold,
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.white,
                                               ))),
                                     ],

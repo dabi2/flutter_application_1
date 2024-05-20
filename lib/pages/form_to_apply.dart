@@ -18,8 +18,10 @@ class Personalinformation extends StatefulWidget {
 class _PersonalinformationState extends State<Personalinformation> {
   bool isFormSubmitted = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  String fromDate = DateTime.now().toString().split(" ")[0];
+  String? loanType;
   final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _AccountNumberController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController fatherNameController = TextEditingController();
@@ -70,10 +72,13 @@ void _submitForm() async {
       // Form is valid, proceed to save data to Firebase
       try {
         await FirebaseFirestore.instance.collection('Applicant_name').add({
-          'userId': userId, // Include the userId in the document
+          'fromDate': fromDate,
+          'loanType': loanType,
+          'userId': userId,
           'name': _nameController.text,
           'Gender': _genderController.text,
           'Address': _addressController.text,
+          'AccountNumber':_AccountNumberController.text,
           'Father_name': _fatherNameController.text,
           'dob': _dobController.text,
           'aadhar': _aadharController.text,
@@ -83,6 +88,7 @@ void _submitForm() async {
 
         // Clear form fields after successful submission
         _nameController.clear();
+        _AccountNumberController.clear();
         _genderController.clear();
         _addressController.clear();
         _dobController.clear();
@@ -150,6 +156,67 @@ void _submitForm() async {
                 key: _formKey,
                 child: Column(
                   children: [
+                    TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: "From Date",
+                  border: OutlineInputBorder(),
+                ),
+                initialValue: fromDate,
+                onTap: () async {
+                  DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      fromDate = picked.toString().split(" ")[0];
+                    });
+                  }
+                },
+              ),
+                    DropdownButtonFormField<String>(
+                value: loanType,
+                decoration: const InputDecoration(
+                  errorBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.solid )),
+                  errorStyle: TextStyle(color: Colors.redAccent,fontSize: 16),
+                  labelText: "Loan Type",
+                  labelStyle: TextStyle(color: Colors.white),
+                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                  focusColor: Colors.black,
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: "Car Loan",
+                    child: Text("Car Loan"),
+                  ),
+                  DropdownMenuItem(
+                    value: "Home Loan",
+                    child: Text("Home Loan"),
+                  ),
+                  DropdownMenuItem(
+                    value: "Instant Loan",
+                    child: Text("Instant Loan"),
+                  ),
+                  DropdownMenuItem(
+                    value: "Personal Loan",
+                    child: Text("Personal Loan"),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    loanType = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a loan type*';
+                  }
+                  return null;
+                },
+              ),
                     TextFormField(
                       keyboardType: TextInputType.name,
                       controller: _genderController,
@@ -260,6 +327,31 @@ void _submitForm() async {
                       height: 10,
                     ),
                     TextFormField(
+                      controller: _AccountNumberController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your valid Account Number';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 77, 68, 68))),
+                          hintStyle: TextStyle(color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
+                          labelText: 'Account Number',
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
                       controller: _dobController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -311,6 +403,7 @@ void _submitForm() async {
                       height: 10,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.number,
                       controller: _loanAmountController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -336,6 +429,7 @@ void _submitForm() async {
                       height: 10,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.number,
                       controller: _ifscController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -348,6 +442,7 @@ void _submitForm() async {
                           labelStyle: TextStyle(color: Colors.white),
                           labelText: 'IFSC',
                           border: OutlineInputBorder(
+                            
                               borderSide: BorderSide(color: Colors.white)),
                           focusedBorder: OutlineInputBorder(
                               borderRadius:

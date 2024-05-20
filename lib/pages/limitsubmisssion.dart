@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 Future<bool> hasUserSubmittedFormOnce(String userId) async {
   try {
     // Query Firestore to check if the user has submitted the form

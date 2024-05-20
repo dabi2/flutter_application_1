@@ -9,7 +9,9 @@ import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
 import 'package:flutter_application_1/pages/form_to_apply.dart';
 import 'package:flutter_application_1/pages/homepage.dart';
 import 'package:flutter_application_1/pages/interest_rate_page.dart';
+import 'package:flutter_application_1/pages/loanpage.dart';
 import 'package:flutter_application_1/pages/profilepage.dart';
+import 'package:flutter_application_1/pages/test2.dart';
 import 'package:flutter_application_1/razor_pay/razorpay.dart';
 
 void main() async {
@@ -46,7 +48,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  const RazorpayScreen(),
+      home:  const LogIn(),
     );
   }
 }
