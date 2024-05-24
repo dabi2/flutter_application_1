@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/color/colors.dart';
-import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
+import 'package:flutter_application_1/borrower/bottomnavigatinbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AccountInformation extends StatefulWidget {
@@ -17,7 +18,7 @@ class _AccountInformationState extends State<AccountInformation> {
   double interestRate = 0.0;
   int duration = 1;
   String fromDate = DateTime.now().toString().split(" ")[0];
-   bool isLoading = false;
+  bool isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -95,7 +96,7 @@ class _AccountInformationState extends State<AccountInformation> {
               //   ],
               // ),
               // SizedBox(height: 20.0),
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Duration: $duration months",style: GoogleFonts.lato(fontSize:20,color:Colors.white),),

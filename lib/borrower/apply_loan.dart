@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
-import 'package:flutter_application_1/pages/drawer.dart';
-import 'package:flutter_application_1/pages/form_to_apply.dart';
+import 'package:flutter_application_1/borrower/drawer.dart';
+import 'package:flutter_application_1/borrower/form_to_apply.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Applyloan extends StatefulWidget {

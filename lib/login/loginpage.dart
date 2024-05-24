@@ -4,10 +4,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/admin/adminauth.dart';
 import 'package:flutter_application_1/auth/auth.dart';
 import 'package:flutter_application_1/login/forgot_password.dart';
 import 'package:flutter_application_1/login/signup.dart';
-import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
+import 'package:flutter_application_1/borrower/bottomnavigatinbar.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -39,7 +40,7 @@ class _LogInState extends State<LogIn> {
             )));
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.orangeAccent,
+            backgroundColor: Color.fromARGB(199, 51, 255, 0),
             content: Text(
               "Wrong Password Provided by User",
               style: TextStyle(fontSize: 18.0),
@@ -56,7 +57,9 @@ class _LogInState extends State<LogIn> {
     double screenHeight = screenSize.height;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: ListView(
+        children: [
+          Container(
         child: Column(
           children: [
             Padding(
@@ -64,8 +67,6 @@ class _LogInState extends State<LogIn> {
               child: Container(
                   width: screenWidth * 0.8,
                   height: screenHeight * 0.3,
-
-                  // height: screenHeight * 0.8,
                   child: Image.asset("assets/images/coins.png")),
             ),
             const SizedBox(
@@ -240,10 +241,21 @@ class _LogInState extends State<LogIn> {
                   ),
                 ),
               ],
+            ),
+            Column(
+              children: [
+                Text("Login For Admin"),
+                SizedBox(height: 20,),
+                ElevatedButton(onPressed: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => AdminLogin() ,));
+                }, child: Text("Admin"))
+              ],
             )
           ],
         ),
       ),
+        ],
+      )
     );
   }
 }

@@ -1,17 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/admin/AdminDashboard.dart';
 import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/login/loginpage.dart';
-import 'package:flutter_application_1/pages/AccountInformation.dart';
-import 'package:flutter_application_1/pages/apply_loan.dart';
-import 'package:flutter_application_1/pages/bottomnavigatinbar.dart';
-import 'package:flutter_application_1/pages/form_to_apply.dart';
-import 'package:flutter_application_1/pages/homepage.dart';
-import 'package:flutter_application_1/pages/interest_rate_page.dart';
-import 'package:flutter_application_1/pages/loanpage.dart';
-import 'package:flutter_application_1/pages/profilepage.dart';
-import 'package:flutter_application_1/pages/test2.dart';
+import 'package:flutter_application_1/borrower/AccountInformation.dart';
+import 'package:flutter_application_1/borrower/apply_loan.dart';
+import 'package:flutter_application_1/borrower/bottomnavigatinbar.dart';
+import 'package:flutter_application_1/borrower/form_to_apply.dart';
+import 'package:flutter_application_1/borrower/homepage.dart';
+import 'package:flutter_application_1/borrower/interest_rate_page.dart';
+import 'package:flutter_application_1/borrower/loanpage.dart';
+import 'package:flutter_application_1/borrower/profilepage.dart';
+import 'package:flutter_application_1/borrower/test2.dart';
 import 'package:flutter_application_1/razor_pay/razorpay.dart';
 
 void main() async {
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  const LogIn(),
+      home:  const AdminDashboard(),
     );
   }
 }

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
-import 'package:flutter_application_1/pages/loanpage.dart';
+import 'package:flutter_application_1/borrower/loanpage.dart';
 import 'homepage.dart';
 import 'profilepage.dart';
 

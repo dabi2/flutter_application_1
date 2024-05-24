@@ -3,9 +3,12 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
-import 'package:flutter_application_1/pages/drawer.dart';
-import 'package:flutter_application_1/pages/payment.dart';
+import 'package:flutter_application_1/borrower/drawer.dart';
+import 'package:flutter_application_1/borrower/payment.dart';
+import 'package:flutter_application_1/borrower/test.dart';
+import 'package:flutter_application_1/razor_pay/razorpay.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Loanpage extends StatefulWidget {
   const Loanpage({super.key});
@@ -13,7 +16,6 @@ class Loanpage extends StatefulWidget {
   @override
   State<Loanpage> createState() => LoanpageState();
 }
-
 
 class LoanpageState extends State<Loanpage> {
   final List _tenureTypes = ["Month(s)", "Year(s)"];
@@ -23,8 +25,20 @@ class LoanpageState extends State<Loanpage> {
   final TextEditingController _principalAmount = TextEditingController();
   final TextEditingController _interestRate = TextEditingController();
   final TextEditingController _tenure = TextEditingController();
+  
+
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return Scaffold(
+        body: Center(
+          child: Text("No user is currently logged in."),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: MainColors.body,
       appBar: AppBar(
@@ -67,7 +81,11 @@ class LoanpageState extends State<Loanpage> {
       ),
       drawer: Drawerclass().buildDrawer(context),
       body: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance.collection('Applicant_name').get(),
+        future: FirebaseFirestore.instance
+            .collection('Applicant_name')
+            .where('userId',
+                isEqualTo: user.uid) // Fetch data for the current user only
+            .get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -251,7 +269,8 @@ class LoanpageState extends State<Loanpage> {
                         child: Container(child: emiResultsWidget(_emiResult))),
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
                           color: MainColors.lightcontainer),
                       child: Padding(
                         padding: const EdgeInsets.all(15.0),
@@ -308,13 +327,9 @@ class LoanpageState extends State<Loanpage> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const PaymentMode()));
-                                    },
+                                  onPressed: (){
+                                    Navigator.push(context,MaterialPageRoute(builder: (context) => RazorPayScreen(),));
+                                  },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.green[700],
                                     ),
@@ -322,6 +337,7 @@ class LoanpageState extends State<Loanpage> {
                                       'Pay Now',
                                       style: TextStyle(color: Colors.white),
                                     )),
+                                // ElevatedButton(onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context) => RazorPayScreen(),));}, child: Text("retrieve"))
                               ],
                             ),
                           ],
@@ -354,7 +370,7 @@ class LoanpageState extends State<Loanpage> {
   Widget emiResultsWidget(emiResult) {
     bool canShow = false;
     String _emiResult = emiResult;
-    if (_emiResult.length > 0) {
+    if (_emiResult.isNotEmpty) {
       canShow = true;
     }
     const SizedBox(

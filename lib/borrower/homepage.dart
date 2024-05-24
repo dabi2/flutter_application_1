@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
-import 'package:flutter_application_1/pages/apply_loan.dart';
-import 'package:flutter_application_1/pages/drawer.dart';
-import 'package:flutter_application_1/pages/eligibilities.dart';
-import 'package:flutter_application_1/pages/interest_rate_page.dart';
-import 'package:flutter_application_1/pages/notifications.dart';
-import 'package:flutter_application_1/pages/test.dart';
+import 'package:flutter_application_1/borrower/apply_loan.dart';
+import 'package:flutter_application_1/borrower/drawer.dart';
+import 'package:flutter_application_1/borrower/eligibilities.dart';
+import 'package:flutter_application_1/borrower/interest_rate_page.dart';
+import 'package:flutter_application_1/borrower/notifications.dart';
+import 'package:flutter_application_1/borrower/test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -85,15 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoanApplicationDetailsPage(),
-                        ));
-                  },
-                  child: const Text("next")),
+              
               const Center(
                 child: CircleAvatar(
                   radius: 40,

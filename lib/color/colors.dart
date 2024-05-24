@@ -6,4 +6,6 @@ class MainColors {
   static Color containercolor = const Color(0xFF00423B);
   static Color lightcontainer = const Color(0xFF037266);
   static Color lightgreen = const Color.fromARGB(255, 8, 192, 134);
+  static Color reminder = const Color(0xFF0ffe28a);
+
 }
