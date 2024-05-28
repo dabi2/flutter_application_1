@@ -285,8 +285,8 @@ class UserDataPage extends StatefulWidget {
 
 class _UserDataPageState extends State<UserDataPage> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _loanAmountController = TextEditingController();
 
   @override
   void initState() {
@@ -299,15 +299,15 @@ class _UserDataPageState extends State<UserDataPage> {
     if (user != null) {
       try {
         DocumentSnapshot userData = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('Applicant_name')
             .doc(user.uid)
             .get();
         if (userData.exists) {
           Map<String, dynamic> data = userData.data() as Map<String, dynamic>;
           setState(() {
             _nameController.text = data['name'] ?? '';
-            _emailController.text = data['email'] ?? '';
-            _phoneNumberController.text = data['phone'] ?? '';
+            _genderController.text = data['Gender'] ?? '';
+            _loanAmountController.text = data['Loan Amount'] ?? '';
           });
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -326,10 +326,10 @@ class _UserDataPageState extends State<UserDataPage> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       try {
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        await FirebaseFirestore.instance.collection('Applicant_name').doc(user.uid).update({
           'name': _nameController.text,
-          'email': _emailController.text,
-          'phone': _phoneNumberController.text,
+          'Gender': _genderController.text,
+          'Loan Amount': _loanAmountController.text,
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('User data updated successfully')),
@@ -360,11 +360,11 @@ class _UserDataPageState extends State<UserDataPage> {
               decoration: InputDecoration(label: const Text('Name')),
             ),
             TextFormField(
-              controller: _emailController,
+              controller: _genderController,
               decoration: InputDecoration(label: const Text('Email')),
             ),
             TextFormField(
-              controller: _phoneNumberController,
+              controller: _loanAmountController,
               decoration: InputDecoration(label: const Text('Phone Number')),
             ),
             const SizedBox(height: 20),

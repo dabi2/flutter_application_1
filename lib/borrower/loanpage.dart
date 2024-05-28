@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/borrower/lun.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/borrower/drawer.dart';
 import 'package:flutter_application_1/borrower/payment.dart';
@@ -11,7 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Loanpage extends StatefulWidget {
-  const Loanpage({super.key});
+  const Loanpage({super.key,});
 
   @override
   State<Loanpage> createState() => LoanpageState();
@@ -32,9 +33,9 @@ class LoanpageState extends State<Loanpage> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      return Scaffold(
-        body: Center(
-          child: Text("No user is currently logged in."),
+      return   Container(
+        child: const  Center(
+          child:  Text("No user is currently logged in."),
         ),
       );
     }
@@ -127,6 +128,7 @@ class LoanpageState extends State<Loanpage> {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // ElevatedButton(onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context) => DisplayImagesPage(),));}, child: Text("Gooooo")),
                     const SizedBox(
                       height: 10,
                     ),

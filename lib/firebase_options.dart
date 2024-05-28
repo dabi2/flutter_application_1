@@ -64,6 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '761321428636',
     projectId: 'finallyloan-a34ea',
     storageBucket: 'finallyloan-a34ea.appspot.com',
+    androidClientId: '761321428636-8vimbejo68nno556oshkgj6i5ea0toih.apps.googleusercontent.com',
     iosClientId: '761321428636-pcm107d07mfo4lvuskce8b42mtg7mven.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
   );
@@ -74,6 +75,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '761321428636',
     projectId: 'finallyloan-a34ea',
     storageBucket: 'finallyloan-a34ea.appspot.com',
+    androidClientId: '761321428636-8vimbejo68nno556oshkgj6i5ea0toih.apps.googleusercontent.com',
     iosClientId: '761321428636-pcm107d07mfo4lvuskce8b42mtg7mven.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterApplication1',
   );
@@ -87,4 +89,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'finallyloan-a34ea.appspot.com',
     measurementId: 'G-RXZLK7BBYX',
   );
+
 }

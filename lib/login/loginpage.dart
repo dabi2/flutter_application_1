@@ -244,11 +244,28 @@ class _LogInState extends State<LogIn> {
             ),
             Column(
               children: [
-                Text("Login For Admin"),
-                SizedBox(height: 20,),
-                ElevatedButton(onPressed: (){
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => AdminLogin() ,));
-                }, child: Text("Admin"))
+                GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminLogin()),
+            );
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+            decoration: BoxDecoration(
+              color: Colors.blue, // Background color of the button
+              borderRadius: BorderRadius.circular(4.0), // Rectangle with rounded corners
+            ),
+            child: Text(
+              "Admin",
+              style: TextStyle(
+                color: Colors.white, // Text color
+                fontSize: 16.0, // Text size
+              ),
+            ),
+          ),
+        ),
               ],
             )
           ],

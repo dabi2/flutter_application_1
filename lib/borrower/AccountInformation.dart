@@ -1,253 +1,187 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_application_1/admin/firebaseApi.dart';
+import 'package:flutter_application_1/borrower/homepage.dart';
 import 'package:flutter_application_1/color/colors.dart';
-import 'package:flutter_application_1/borrower/bottomnavigatinbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AccountInformation extends StatefulWidget {
-  const AccountInformation({Key? key, required bool isFormSubmitted}) : super(key: key);
+  const AccountInformation({Key? key, required bool isFormSubmitted})
+      : super(key: key);
 
   @override
-  _AccountInformationState createState() => _AccountInformationState();
+  State<AccountInformation> createState() => _AccountInformationState();
 }
 
 class _AccountInformationState extends State<AccountInformation> {
-  String? loanType;
-  double interestRate = 0.0;
-  int duration = 1;
-  String fromDate = DateTime.now().toString().split(" ")[0];
-  bool isLoading = false;
+  File? aadharFile;
+  File? panFile;
+  File? categoryFile;
+  File? dobFile;
+  File? accountProofFile;
 
-  final _formKey = GlobalKey<FormState>();
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      // Handle the case when user is not logged in
+      // For example, you can navigate to the login page
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final aadharFileName =
+        aadharFile != null ? basename(aadharFile!.path) : 'No file selected';
+    final panFileName =
+        panFile != null ? basename(panFile!.path) : 'No file selected';
+    final categoryFileName = categoryFile != null
+        ? basename(categoryFile!.path)
+        : 'No file selected';
+    final dobFileName =
+        dobFile != null ? basename(dobFile!.path) : 'No file selected';
+    final accountProofFileName = accountProofFile != null
+        ? basename(accountProofFile!.path)
+        : 'No file selected';
+
     return Scaffold(
       backgroundColor: MainColors.body,
       appBar: AppBar(
         backgroundColor: MainColors.appbar,
-        title: Center(child: Text("Loan",style: GoogleFonts.lato(fontSize:20,color:Colors.white),)),
+        title: Text(
+          "UPLOAD YOUR DOCUMENTS",
+          style: GoogleFonts.audiowide(color: Colors.white),
+        ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              DropdownButtonFormField<String>(
-                value: loanType,
-                decoration: const InputDecoration(
-                  errorBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.solid )),
-                  errorStyle: TextStyle(color: Colors.redAccent,fontSize: 16),
-                  labelText: "Loan Type",
-                  labelStyle: TextStyle(color: Colors.white),
-                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                  focusColor: Colors.black,
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: "Car Loan",
-                    child: Text("Car Loan"),
-                  ),
-                  DropdownMenuItem(
-                    value: "Home Loan",
-                    child: Text("Home Loan"),
-                  ),
-                  DropdownMenuItem(
-                    value: "Instant Loan",
-                    child: Text("Instant Loan"),
-                  ),
-                  DropdownMenuItem(
-                    value: "Personal Loan",
-                    child: Text("Personal Loan"),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    loanType = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select a loan type*';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20.0),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Text("Interest Rate: ${interestRate.toStringAsFixed(2)}%"),
-              //     Slider(
-              //       value: interestRate,
-              //       min: 0.0,
-              //       max: 20.0,
-              //       divisions: 200,
-              //       label: interestRate.toStringAsFixed(2),
-              //       onChanged: (value) {
-              //         setState(() {
-              //           interestRate = value;
-              //         });
-              //       },
-              //     ),
-              //   ],
-              // ),
-              // SizedBox(height: 20.0),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Duration: $duration months",style: GoogleFonts.lato(fontSize:20,color:Colors.white),),
-                  Slider(
-                    activeColor: MainColors.lightgreen,
-                    value: duration.toDouble(),
-                    min: 1.0,
-                    max: 60.0,
-                    divisions: 59,
-                    label: duration.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        duration = value.toInt();
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: "From Date",
-                  border: OutlineInputBorder(),
-                ),
-                initialValue: fromDate,
-                onTap: () async {
-                  DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    setState(() {
-                      fromDate = picked.toString().split(" ")[0];
-                    });
-                  }
-                },
-              ),
-               const SizedBox(height: 20.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                        backgroundColor: MainColors.lightgreen,
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                      ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    // Save data to Firestore
-                    saveLoanInformation();
-                  }
-                },
-                child: Text("Submit",style: GoogleFonts.lato(fontSize:20,color:Colors.black),),
-              ),
-              if (isLoading)
-            const Center(
-              child: CircularProgressIndicator(backgroundColor: Colors.amber,),
+      body: ListView(
+        padding: EdgeInsets.all(20.0),
+        children: [
+          buildFileUploadSection(context, "Upload Aadhar Card", aadharFileName,
+              () => selectFile((file) => setState(() => aadharFile = file))),
+          buildFileUploadSection(context, "Upload PAN Card", panFileName,
+              () => selectFile((file) => setState(() => panFile = file))),
+          buildFileUploadSection(
+              context,
+              "Upload Category Certificate",
+              categoryFileName,
+              () => selectFile((file) => setState(() => categoryFile = file))),
+          buildFileUploadSection(
+              context,
+              "Upload Date of Birth Proof",
+              dobFileName,
+              () => selectFile((file) => setState(() => dobFile = file))),
+          buildFileUploadSection(
+              context,
+              "Upload Account Proof",
+              accountProofFileName,
+              () => selectFile(
+                  (file) => setState(() => accountProofFile = file))),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: uploadFiles,
+            child: Text(
+              "Upload All Files",
+              style:
+                  GoogleFonts.inter(fontSize: 16, color: MainColors.lightgreen),
             ),
-            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildFileUploadSection(BuildContext context, String title,
+      String fileName, VoidCallback onPressed) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Text(fileName),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: onPressed,
+          child: Text(
+            "Select File",
+            style:
+                GoogleFonts.inter(fontSize: 16, color: MainColors.lightgreen),
           ),
         ),
-        
-      ),
-      
-      
+        const SizedBox(height: 20),
+      ],
     );
   }
 
-  void saveLoanInformation() async {
-  try {
-    String? userId = FirebaseAuth.instance.currentUser?.uid;
+  Future selectFile(Function(File) onFileSelected) async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    if (result == null) return;
 
-    // Check if the user already submitted the form
-    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-        .collection('Applicant')
-        .where('userId', isEqualTo: userId)
-        .get();
+    final path = result.files.single.path!;
+    onFileSelected(File(path));
+  }
 
-    if (snapshot.docs.isNotEmpty) {
-      // User has already submitted the form, show dialog box
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Your Application is already in progress"),
-            content: const Text("Please be patience we will soon notify you! Thank you for understanding"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog box
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        },
+  Future uploadFiles() async {
+    if (user == null) return;
+
+    if (aadharFile == null ||
+        panFile == null ||
+        categoryFile == null ||
+        dobFile == null ||
+        accountProofFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select all required files')),
       );
-    } else {
-      // User hasn't submitted the form, proceed with submission
-      await FirebaseFirestore.instance.collection('Applicant').add({
-        'userId': userId,
-        'loanType': loanType,
-        'interestRate': interestRate,
-        'duration': duration,
-        'fromDate': fromDate,
-      });
-
-      // Show success dialog box
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Application Submitted"),
-            content: Text("Your application has been submitted and is being processed."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Mybottomnavigationbar(),
-                    ),
-                  );
-                },
-                child: Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
+      return;
     }
 
-    setState(() {
-      isLoading = false;
-    });
-  } catch (e) {
-    // Handle errors
-    print('Error submitting loan information: $e');
-    // Show error message
+    final userId = user!.uid;
+
+    if (aadharFile != null) await uploadFile(aadharFile!, userId, 'aadhar');
+    if (panFile != null) await uploadFile(panFile!, userId, 'pan');
+    if (categoryFile != null)
+      await uploadFile(categoryFile!, userId, 'category');
+    if (dobFile != null) await uploadFile(dobFile!, userId, 'dob');
+    if (accountProofFile != null)
+      await uploadFile(accountProofFile!, userId, 'account_proof');
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Error submitting loan information. Please try again later.'),
+      const SnackBar(content: Text('Files uploaded successfully')),
+    );
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title:  Text('Congratulaions!',style: GoogleFonts.inter(color:Colors.green,fontSize:25),),
+        content: const Text('Your Application Has Been Submited'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+              );
+            },
+            child: const Text('OK'),
+          ),
+        ],
       ),
     );
-    setState(() {
-      isLoading = false;
-    });
   }
-}
 
+  Future uploadFile(File file, String userId, String category) async {
+    final fileName = basename(file.path);
+    final destination = 'LOAN_DOCUMENTS/$userId/$category/$fileName';
+    await FirebaseApi.uploadFile(destination, file);
+  }
+
+  String basename(String path) {
+    return path.split('/').last;
+  }
 }

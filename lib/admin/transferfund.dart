@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_1/color/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-class RazorPayScreen extends StatefulWidget {
-  const RazorPayScreen({super.key});
+class AdminTransferFund extends StatefulWidget {
+  const AdminTransferFund({super.key});
 
   @override
-  State<RazorPayScreen> createState() => _RazorPayScreenState();
+  State<AdminTransferFund> createState() => _AdminTransferFundState();
 }
 
-class _RazorPayScreenState extends State<RazorPayScreen> {
+class _AdminTransferFundState extends State<AdminTransferFund> {
+
   late Razorpay razorpay;
   TextEditingController textEditingController = TextEditingController();
 
@@ -78,7 +79,7 @@ class _RazorPayScreenState extends State<RazorPayScreen> {
           children: [
             TextField(
               controller: textEditingController,
-              decoration: const InputDecoration(hintText: "Pay your Dept"),
+              decoration: const InputDecoration(hintText: "Transfer Fund"),
               keyboardType: TextInputType.number,
             ),
             SizedBox(
@@ -87,7 +88,7 @@ class _RazorPayScreenState extends State<RazorPayScreen> {
             ElevatedButton(
               onPressed: openCheckout,
               child: Text(
-                "Pay Now",
+                "Transfer Now",
                 style: TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(

@@ -1,7 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/admin/AdminDashboard.dart';
+import 'package:flutter_application_1/admin/Loan_request.dart';
+import 'package:flutter_application_1/borrower/lun.dart';
+import 'package:flutter_application_1/borrower/notifications.dart';
+import 'package:flutter_application_1/cloudMessaging/fcm.dart';
 import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/login/loginpage.dart';
 import 'package:flutter_application_1/borrower/AccountInformation.dart';
@@ -15,6 +19,7 @@ import 'package:flutter_application_1/borrower/profilepage.dart';
 import 'package:flutter_application_1/borrower/test2.dart';
 import 'package:flutter_application_1/razor_pay/razorpay.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
@@ -33,6 +38,8 @@ void main() async {
     print("Error initializing Firebase: $e");
   }
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseMessaging.instance.subscribeToTopic('sample');
+  await FirebaseCm().initNotifictaions();
   runApp(const MyApp());
 }
 
@@ -49,7 +56,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home:  const AdminDashboard(),
+      home:  const LogIn(),
+      navigatorKey: navigatorKey,
+      routes: {
+        '/notification_screen':(context) => NotificationsPage(),
+      },
     );
   }
 }

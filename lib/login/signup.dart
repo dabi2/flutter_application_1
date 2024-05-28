@@ -29,7 +29,7 @@ class _SignUpState extends State<SignUp> {
         );
 
         // Store user data in Firestore
-        await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        await FirebaseFirestore.instance.collection('User').doc(userCredential.user!.uid).set({
           'name': namecontroller.text,
           'email': mailcontroller.text,
         });

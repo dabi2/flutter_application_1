@@ -11,7 +11,7 @@ import 'package:flutter_application_1/borrower/test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key,});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -19,6 +19,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String currentUserName = "User";
+  
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -97,10 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Text.rich(TextSpan(children: [
                 TextSpan(
-                    text: " Welcome Back $currentUserName",
+                    text: " Welcome $currentUserName",
                     style: GoogleFonts.lato(fontSize: 20, color: Colors.grey)),
                 TextSpan(
-                    text: " !!",
+                    text: " !",
                     style: GoogleFonts.lato(
                         fontSize: 30,
                         fontWeight: FontWeight.normal,

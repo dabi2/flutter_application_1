@@ -3,14 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_application_1/borrower/helpandfaq.dart';
+import 'package:flutter_application_1/borrower/setting.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/borrower/drawer.dart';
 import 'package:flutter_application_1/borrower/editprofile.dart';
+import 'package:flutter_application_1/login/loginpage.dart';
 // import 'package:flutter_application_1/pages/editable_personal_info.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Profilepagez extends StatefulWidget {
-  const Profilepagez({super.key});
+  const Profilepagez({
+    super.key,
+  });
 
   @override
   State<Profilepagez> createState() => _ProfilepagezState();
@@ -18,11 +23,22 @@ class Profilepagez extends StatefulWidget {
 
 class _ProfilepagezState extends State<Profilepagez> {
   String userId = "";
+  String currentUserName = "User";
+
+  void _getCurrentUser() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        currentUserName = user.displayName ?? "User";
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     getCurrentUser();
+    _getCurrentUser();
   }
 
   void getCurrentUser() {
@@ -81,27 +97,34 @@ class _ProfilepagezState extends State<Profilepagez> {
                 height: 20,
               ),
               Center(
-                
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      child: Icon(Icons.person,size: 50,),
-                      backgroundColor: Colors.grey,
-                      maxRadius: 40,
+                  child: Column(
+                children: [
+                  CircleAvatar(
+                    child: Icon(
+                      Icons.person,
+                      size: 50,
                     ),
-                    SizedBox(height: 20,),
-                    Text(
-                  "MY ACCOUNT",
-                  style: GoogleFonts.inter(color: Colors.white, fontSize: 20),
-                ),
-                Divider(
-                  color: Colors.grey,
-                  indent: 40,
-                  endIndent: 40,
-                )
-                  ],
-                )
-              ),
+                    backgroundColor: Colors.grey,
+                    maxRadius: 40,
+                  ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
+                  Text("$currentUserName",style: GoogleFonts.lato(fontSize:20,color:Colors.grey),),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // Text(
+                  //   "MY ACCOUNT",
+                  //   style: GoogleFonts.inter(color: Colors.white, fontSize: 20),
+                  // ),
+                  Divider(
+                    color: Colors.grey,
+                    indent: 40,
+                    endIndent: 40,
+                  )
+                ],
+              )),
             ],
           ),
           Padding(
@@ -115,13 +138,25 @@ class _ProfilepagezState extends State<Profilepagez> {
                     TextButton.icon(
                         onPressed: () {
                           Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const UserDataPage()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const UserDataPage()));
                         },
-                        icon: const Icon(Icons.person,color: Colors.white,),
-                        label: Text("MY PROFILE",style: GoogleFonts.inter(fontSize:20,color: Colors.white,),)),
-                    const Icon(Icons.arrow_forward_ios_rounded,color: Colors.white,)
+                        icon: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          "MY PROFILE",
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        )),
+                    const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.white,
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -131,29 +166,28 @@ class _ProfilepagezState extends State<Profilepagez> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.notifications,color: Colors.white,),
-                        label: Text(
-                          "NOTIFICATION SETTINGS",
-                          style: GoogleFonts.inter(fontSize: 20,color: Colors.white,),
-                        )),
-                    Icon(Icons.arrow_forward_ios_rounded,color: Colors.white,),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.settings,color: Colors.white,),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Settingscreen(),
+                              ));
+                        },
+                        icon: Icon(
+                          Icons.settings,
+                          color: Colors.white,
+                        ),
                         label: Text(
                           "SETTINGS",
-                          style: GoogleFonts.inter(fontSize: 20,color: Colors.white,),
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
                         )),
-                    Icon(Icons.arrow_forward_ios_rounded,color: Colors.white,),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.white,
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -163,13 +197,28 @@ class _ProfilepagezState extends State<Profilepagez> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.question_mark_rounded,color: Colors.white,),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FAQPage(),
+                              ));
+                        },
+                        icon: Icon(
+                          Icons.question_mark_rounded,
+                          color: Colors.white,
+                        ),
                         label: Text(
-                          "Helps & FACQ's",
-                          style: GoogleFonts.inter(fontSize: 20,color: Colors.white,),
+                          "Helps & FAQ's",
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
                         )),
-                    Icon(Icons.arrow_forward_ios_rounded,color: Colors.white,),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.white,
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -179,13 +228,22 @@ class _ProfilepagezState extends State<Profilepagez> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.logout,color: Colors.grey,),
+                        onPressed: () {
+                          _logout(context);
+                        },
+                        icon: Icon(
+                          Icons.logout,
+                          color: Colors.grey,
+                        ),
                         label: Text(
                           "LOG OUT",
-                          style: GoogleFonts.inter(fontSize: 20,color:Colors.grey),
+                          style: GoogleFonts.inter(
+                              fontSize: 20, color: Colors.grey),
                         )),
-                    Icon(Icons.arrow_forward_ios_rounded,color: Colors.white,),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.white,
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -197,5 +255,11 @@ class _ProfilepagezState extends State<Profilepagez> {
         ],
       ),
     );
+  }
+
+  void _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LogIn()));
   }
 }

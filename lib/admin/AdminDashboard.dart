@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_application_1/admin/transferfund.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/login/loginpage.dart'; // Corrected import statement
 import 'package:google_fonts/google_fonts.dart';
@@ -184,7 +185,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context,MaterialPageRoute(builder: (context) => AdminTransferFund(),));
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               Colors.green, // Change button color to green
@@ -346,33 +349,46 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  void _showMessageDialog(BuildContext context) {
-    String message = '';
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Enter Message"),
-          content: TextField(
-            onChanged: (value) {
-              message = value;
+void _showMessageDialog(BuildContext context) {
+  final TextEditingController _controller = TextEditingController();
+  String message = 'jhgjh';
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Enter Message"),
+        content: TextField(
+          controller: _controller,
+          onChanged: (value) {
+            message = value;
+          },
+          decoration: const InputDecoration(hintText: "Type your message here"),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              if (message.trim().isEmpty) {
+                // Show an alert if the message is empty
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Message cannot be empty")),
+                );
+                return;
+              }
+              // Process the message
+              print("Message: $message");
+              Navigator.of(context).pop();
             },
-            decoration:
-                const InputDecoration(hintText: "Type your message here"),
+            child: const Text("Submit"),
           ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                // Process the message
-                print("Message: $message");
-                Navigator.of(context).pop();
-              },
-              child: const Text("Submit"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+        ],
+      );
+    },
+  ).then((_) {
+    // Clean up the controller when the dialog is dismissed
+    _controller.dispose();
+  });
+}
+
 }

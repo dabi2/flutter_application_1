@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/borrower/contactus.dart';
+import 'package:flutter_application_1/borrower/helpandfaq.dart';
+import 'package:flutter_application_1/borrower/setting.dart';
+import 'package:flutter_application_1/borrower/transactions.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/login/loginpage.dart';
 
@@ -36,6 +40,9 @@ Widget buildDrawer(BuildContext context){
           title: const Text('Transactions History',style: TextStyle(color: Colors.white),),
           
           onTap: () {
+            Navigator.push(
+              context,MaterialPageRoute(builder: (context) => TransactionsHistory(),)
+            );
             // Navigator.push(
             //   context,
             //   MaterialPageRoute(builder: (context) => ShowtransactionsHistory())
@@ -45,17 +52,23 @@ Widget buildDrawer(BuildContext context){
         ListTile(
           leading: const Icon(Icons.settings,color: Colors.white,),
           title: const Text('Notification Setting',style: TextStyle(color: Colors.white),),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,MaterialPageRoute(builder: (context) => Settingscreen(),));
+          },
         ),
         ListTile(
           leading: const Icon(Icons.call,color: Colors.white,),
           title: const Text('Contact us',style: TextStyle(color: Colors.white),),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,MaterialPageRoute(builder: (context) => ContactUsPage(),));
+          },
         ),
         ListTile(
           leading: const Icon(Icons.help_outline_outlined,color: Colors.white,),
           title: const Text('Help and FAQ',style: TextStyle(color: Colors.white),),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,MaterialPageRoute(builder: (context) => FAQPage(),));
+          },
         ),
         const Divider(
           indent: 20,
