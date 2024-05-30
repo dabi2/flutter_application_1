@@ -18,12 +18,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<int> items = List.generate(20, (i) => i);
+
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      items = List.generate(20, (i) => i + 20);
+    });
+  }
   String currentUserName = "User";
   
   
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getCurrentUser();
   }
@@ -80,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 100,
       ),
       drawer: Drawerclass().buildDrawer(context),
-      body: ListView(
+      body: RefreshIndicator(child: ListView(
         children: [
           Column(
             children: [
@@ -180,9 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   decoration: BoxDecoration(
                     // boxShadow:List.filled(growable: bool.hasEnvironment(String), fill),
                     border: const Border(top: BorderSide.none),
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                     color: MainColors.containercolor,
                   ),
                   child: Row(
@@ -450,6 +455,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-    );
+     onRefresh: _refresh,color: MainColors.lightgreen,));
   }
 }

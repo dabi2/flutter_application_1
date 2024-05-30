@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,13 +10,20 @@ import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/login/loginpage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AdminPage extends StatefulWidget {
+class AdminPage2 extends StatefulWidget {
   @override
-  _AdminPageState createState() => _AdminPageState();
+  _AdminPage2State createState() => _AdminPage2State();
 }
 
-class _AdminPageState extends State<AdminPage> {
+class _AdminPage2State extends State<AdminPage2> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> _fetchAllApplicantData() async {
     try {
@@ -41,19 +50,27 @@ class _AdminPageState extends State<AdminPage> {
     }
   }
 
-  Future<String?> _getImageUrl(String userId, String category) async {
+  Future<List<Map<String, dynamic>>> _loadFiles(String userId, String category) async {
+    final List<Map<String, dynamic>> files = [];
+
     try {
-      final ref = _storage.ref('LOAN_DOCUMENTS/$userId/$category');
-      final result = await ref.listAll();
-      if (result.items.isNotEmpty) {
-        return await result.items.first.getDownloadURL();
-      } else {
-        return null;
+      final categoryRef = _storage.ref('LOAN_DOCUMENTS/$userId/$category');
+      final fileList = await categoryRef.listAll();
+
+      for (var fileRef in fileList.items) {
+        final fileUrl = await fileRef.getDownloadURL();
+        files.add({
+          'userId': userId,
+          'category': category,
+          'fileName': fileRef.name,
+          'fileUrl': fileUrl,
+        });
       }
     } catch (e) {
-      print("Error getting image URL: $e");
-      return null;
+      debugPrint('Error loading files for $category: $e');
     }
+
+    return files;
   }
 
   @override
@@ -81,7 +98,7 @@ class _AdminPageState extends State<AdminPage> {
             ),
           )
         ],
-        title: Text('Admin Panel',
+        title: Text('Admin Panel 2',
             style: GoogleFonts.audiowide(color: Colors.white)),
         backgroundColor: MainColors.appbar,
       ),
@@ -89,11 +106,11 @@ class _AdminPageState extends State<AdminPage> {
         future: _fetchAllApplicantData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No data found'));
+            return Center(child: Text('No data found'));
           } else {
             var allApplicantData = snapshot.data!;
             return ListView.builder(
@@ -101,29 +118,29 @@ class _AdminPageState extends State<AdminPage> {
               itemBuilder: (context, index) {
                 var applicantData = allApplicantData[index];
                 var userId = applicantData['userId'];
-                return FutureBuilder<Map<String, String?>>(
+                return FutureBuilder<Map<String, List<Map<String, dynamic>>>>(
                   future: Future.wait([
-                    _getImageUrl(userId, 'category'),
-                    _getImageUrl(userId, 'aadhar'),
-                    _getImageUrl(userId, 'account_proof'),
-                    _getImageUrl(userId, 'dob'),
-                    _getImageUrl(userId, 'pan'),
-                  ]).then((List<String?> urls) {
+                    _loadFiles(userId, 'category'),
+                    _loadFiles(userId, 'aadhar'),
+                    _loadFiles(userId, 'account_proof'),
+                    _loadFiles(userId, 'dob'),
+                    _loadFiles(userId, 'pan'),
+                  ]).then((List<List<Map<String, dynamic>>> filesLists) {
                     return {
-                      'category': urls[0],
-                      'aadhar': urls[1],
-                      'account_proof': urls[2],
-                      'dob': urls[3],
-                      'pan': urls[4],
+                      'category': filesLists[0],
+                      'aadhar': filesLists[1],
+                      'account_proof': filesLists[2],
+                      'dob': filesLists[3],
+                      'pan': filesLists[4],
                     };
                   }),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (!snapshot.hasData) {
-                      return const Center(child: Text('No images found'));
+                      return Center(child: Text('No images found'));
                     } else {
                       var images = snapshot.data!;
                       return Padding(
@@ -140,22 +157,22 @@ class _AdminPageState extends State<AdminPage> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => const AdminPage1(),
+                                            builder: (context) => AdminPage1(),
                                           ));
                                     },
-                                    child: const Text("ok")),
+                                    child: Text("ok")),
                                 Text('Applicant ${index + 1}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
-                                const SizedBox(height: 16),
+                                SizedBox(height: 16),
                                 Table(
                                   border: TableBorder.all(color: Colors.grey),
                                   children: [
                                     TableRow(
                                       decoration: BoxDecoration(
                                           color: MainColors.lightgreen),
-                                      children: const [
+                                      children: [
                                         Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Text("Field"),
@@ -172,14 +189,14 @@ class _AdminPageState extends State<AdminPage> {
                                     ),
                                     TableRow(
                                       children: [
-                                        const Padding(
+                                        Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Text("Name: "),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(applicantData['name'] ??
-                                              'N/A'),
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                              applicantData['name'] ?? 'N/A'),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -189,7 +206,7 @@ class _AdminPageState extends State<AdminPage> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const AdminTransferFund(),
+                                                        AdminTransferFund(),
                                                   ));
                                             },
                                             style: ElevatedButton.styleFrom(
@@ -201,8 +218,8 @@ class _AdminPageState extends State<AdminPage> {
                                             ),
                                             child: const Text(
                                               "Approve Loan",
-                                              style:
-                                                  TextStyle(color: Colors.white),
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
@@ -210,14 +227,15 @@ class _AdminPageState extends State<AdminPage> {
                                     ),
                                     TableRow(
                                       children: [
-                                        const Padding(
+                                        Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Text("Loan Type: "),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(applicantData['loanType'] ??
-                                              'N/A'),
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                              applicantData['loanType'] ??
+                                                  'N/A'),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -234,22 +252,21 @@ class _AdminPageState extends State<AdminPage> {
                                             ),
                                             child: const Text(
                                               "Reject Loan",
-                                              style:
-                                                  TextStyle(color: Colors.white),
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    
                                     TableRow(
                                       children: [
-                                        const Padding(
+                                        Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Text("Loan Amount: "),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding: EdgeInsets.all(8.0),
                                           child: Text(
                                               applicantData['Loan Amount'] ??
                                                   'N/A'),
@@ -270,8 +287,8 @@ class _AdminPageState extends State<AdminPage> {
                                             ),
                                             child: const Text(
                                               "Reminder Message",
-                                              style:
-                                                  TextStyle(color: Colors.black),
+                                              style: TextStyle(
+                                                  color: Colors.black),
                                             ),
                                           ),
                                         ),
@@ -279,29 +296,15 @@ class _AdminPageState extends State<AdminPage> {
                                     ),
                                     TableRow(
                                       children: [
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text("phone number: "),
-                                        ),
                                         Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(applicantData['phone number'] ??
-                                              'N/A'),
-                                        ),
-                                        const SizedBox(),
-                                      ],
-                                    ),
-                                    TableRow(
-                                      children: [
-                                        const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Text("Account Number: "),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(applicantData[
-                                                  'AccountNumber'] ??
-                                              'N/A'),
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                              applicantData['AccountNumber'] ??
+                                                  'N/A'),
                                         ),
                                         const SizedBox(),
                                       ],
@@ -312,8 +315,8 @@ class _AdminPageState extends State<AdminPage> {
                                         "Aadhar card", images['aadhar']),
                                     _buildDocumentRow(
                                         "PAN card", images['pan']),
-                                    _buildDocumentRow("Date of Birth Proof",
-                                        images['dob']),
+                                    _buildDocumentRow(
+                                        "Date of Birth Proof", images['dob']),
                                     _buildDocumentRow("Account Proof",
                                         images['account_proof']),
                                   ],
@@ -334,42 +337,49 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  TableRow _buildDocumentRow(String title, String? url) {
+  TableRow _buildDocumentRow(String title, List<Map<String, dynamic>>? files) {
     return TableRow(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Text(title),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: url != null
-              ? InkWell(
-                  onTap: () {
-                    _openDocument(url);
-                    debugPrint("Image Open: $url");
-                  },
-                  child: const Row(
-                    children: [
-                      Text("OPEN"),
-                      SizedBox(width: 4),
-                      Icon(Icons.folder_open_rounded),
-                    ],
-                  ),
+          padding: EdgeInsets.all(8.0),
+          child: files != null && files.isNotEmpty
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: files.map((file) {
+                    return InkWell(
+                      onTap: () {
+                        _openDocument(file['fileUrl']);
+                        debugPrint("Image Open: ${file['fileUrl']}");
+                      },
+                      child: Row(
+                        children: [
+                          Text(file['fileName']),
+                          SizedBox(width: 4),
+                          Icon(Icons.folder_open_rounded),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 )
-              : const Text('N/A'),
+              : Text('N/A'),
         ),
         const SizedBox(),
       ],
     );
   }
-    void _logout(BuildContext context) async {
+
+  void _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LogIn()),
     );
   }
+
   void _showMessageDialog(BuildContext context) {
     String message = '';
 
@@ -419,7 +429,7 @@ class DocumentViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Document Viewer"),
+        title: Text("Document Viewer"),
       ),
       body: Center(
         child: Image.network(url),

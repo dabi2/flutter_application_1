@@ -1,292 +1,39 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_application_1/color/colors.dart';
-// import 'package:flutter_application_1/pages/AccountInformation.dart';
+import 'dart:io';
 
-// class EditPersonalInformation extends StatefulWidget {
-//   const EditPersonalInformation({super.key});
-
-//   @override
-//   State<EditPersonalInformation> createState() => _EditPersonalInformationState();
-// }
-
-// class _EditPersonalInformationState extends State<EditPersonalInformation> {
-//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-//   String? fromDate;
-//   String? loanType;
-//   final TextEditingController _genderController = TextEditingController();
-//   final TextEditingController _accountNumberController = TextEditingController();
-//   final TextEditingController _nameController = TextEditingController();
-//   final TextEditingController _addressController = TextEditingController();
-//   final TextEditingController _fatherNameController = TextEditingController();
-//   final TextEditingController _dobController = TextEditingController();
-//   final TextEditingController _aadharController = TextEditingController();
-//   final TextEditingController _loanAmountController = TextEditingController();
-//   final TextEditingController _ifscController = TextEditingController();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _loadUserData();
-//   }
-
-//   Future<void> _loadUserData() async {
-//     User? user = FirebaseAuth.instance.currentUser;
-//     if (user != null) {
-//       try {
-//         DocumentSnapshot userData = await FirebaseFirestore.instance
-//             .collection('Applicant_name')
-//             .doc(user.uid)
-//             .get();
-//         if (userData.exists) {
-//           Map<String, dynamic> data = userData.data() as Map<String, dynamic>;
-//           setState(() {
-//             fromDate = data['fromDate'];
-//             loanType = data['loanType'];
-//             _nameController.text = data['name'];
-//             _genderController.text = data['Gender'];
-//             _addressController.text = data['Address'];
-//             _accountNumberController.text = data['AccountNumber'];
-//             _fatherNameController.text = data['Father_name'];
-//             _dobController.text = data['dob'];
-//             _aadharController.text = data['aadhar'];
-//             _loanAmountController.text = data['Loan Amount'];
-//             _ifscController.text = data['ifsc'];
-//           });
-//         } else {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(content: Text('No data found for this user')),
-//           );
-//         }
-//       } catch (e) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Failed to load data: $e')),
-//         );
-//       }
-//     }
-//   }
-
-//   Future<void> _updateUserData() async {
-//   User? user = FirebaseAuth.instance.currentUser;
-//   if (user != null && _formKey.currentState!.validate()) {
-//     try {
-//       await FirebaseFirestore.instance.collection('Applicant_name').doc(user.uid).update({
-//         'fromDate': fromDate,
-//         'loanType': loanType,
-//         'name': _nameController.text,
-//         'Gender': _genderController.text,
-//         'Address': _addressController.text,
-//         'AccountNumber': _accountNumberController.text,
-//         'Father_name': _fatherNameController.text,
-//         'dob': _dobController.text,
-//         'aadhar': _aadharController.text,
-//         'ifsc': _ifscController.text,
-//       });
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Information updated successfully')),
-//       );
-//     } catch (e) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text('Failed to update information: $e')),
-//       );
-//     }
-//   }
-// }
-//  void _showEditDialog(String field, TextEditingController controller) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       String? updatedValue = '';
-//       return AlertDialog(
-//         title: Text('Edit $field'),
-//         content: TextField(
-//           controller: controller,
-//           decoration: InputDecoration(labelText: field),
-//           onChanged: (value) {
-//             updatedValue = value; // Save the edited value
-//           },
-//         ),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//             child: const Text('Cancel'),
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               setState(() {
-//                 controller.text = updatedValue ?? controller.text; // Update the text controller with the edited value
-//               });
-//               Navigator.of(context).pop();
-//             },
-//             child: const Text('Save'),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       // backgroundColor: MainColors.body,
-//       appBar: AppBar(
-//         backgroundColor: MainColors.appbar,
-//         title: const Text(
-//           "EDIT PERSONAL INFORMATION",
-//           style: TextStyle(color: Colors.white),
-//         ),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(20.0),
-//         child: Form(
-//           key: _formKey,
-//           child: ListView(
-//             children: [
-//               ListTile(
-//                 title: const Text("From Date"),
-//                 subtitle: Text(fromDate ?? ''),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () async {
-//                     DateTime? picked = await showDatePicker(
-//                       context: context,
-//                       initialDate: DateTime.now(),
-//                       firstDate: DateTime(2000),
-//                       lastDate: DateTime(2100),
-//                     );
-//                     if (picked != null) {
-//                       setState(() {
-//                         fromDate = picked.toString().split(" ")[0];
-//                       });
-//                     }
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("Loan Type"),
-//                 subtitle: Text(loanType ?? ''),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("Loan Type", _loanAmountController);
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("Gender"),
-//                 subtitle: Text(_genderController.text),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("Gender", _genderController);
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("Name"),
-//                 subtitle: Text(_nameController.text),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("Name", _nameController);
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("Address"),
-//                 subtitle: Text(_addressController.text),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("Address", _addressController);
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("Father's Name"),
-//                 subtitle: Text(_fatherNameController.text),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("Father's Name", _fatherNameController);
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("Account Number"),
-//                 subtitle: Text(_accountNumberController.text),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("Account Number", _accountNumberController);
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("Date of Birth"),
-//                 subtitle: Text(_dobController.text),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("Date of Birth", _dobController);
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("Aadhar"),
-//                 subtitle: Text(_aadharController.text),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("Aadhar", _aadharController);
-//                   },
-//                 ),
-//               ),
-//               ListTile(
-//                 title: const Text("IFSC"),
-//                 subtitle: Text(_ifscController.text),
-//                 trailing: IconButton(
-//                   icon: const Icon(Icons.edit),
-//                   onPressed: () {
-//                     _showEditDialog("IFSC", _ifscController);
-//                   },
-//                 ),
-//               ),
-//               const SizedBox(height: 20),
-//               ElevatedButton(
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: MainColors.lightgreen,
-//                 ),
-//                 onPressed: _updateUserData,
-//                 child: const Text('Update', style: TextStyle(color: Colors.white)),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/color/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class UserDataPage extends StatefulWidget {
-  const UserDataPage({Key? key}) : super(key: key);
+class EditPersonalInformation extends StatefulWidget {
+  const EditPersonalInformation({Key? key}) : super(key: key);
 
   @override
-  _UserDataPageState createState() => _UserDataPageState();
+  _EditPersonalInformationState createState() =>
+      _EditPersonalInformationState();
 }
 
-class _UserDataPageState extends State<UserDataPage> {
-  final TextEditingController _nameController = TextEditingController();
+class _EditPersonalInformationState extends State<EditPersonalInformation> {
+  List<int> items = List.generate(20, (i) => i);
+
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      items = List.generate(20, (i) => i + 20); // Update with new data
+    });
+  }
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? loanType;
   final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _accountNumberController =
+      TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _loanAmountController = TextEditingController();
+  final TextEditingController _ifscController = TextEditingController();
+  final TextEditingController _fatherNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   @override
   void initState() {
@@ -294,49 +41,87 @@ class _UserDataPageState extends State<UserDataPage> {
     _loadUserData();
   }
 
-  Future<void> _loadUserData() async {
+  Future<Map<String, dynamic>?> _fetchUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        DocumentSnapshot userData = await FirebaseFirestore.instance
-            .collection('Applicant_name')
-            .doc(user.uid)
-            .get();
-        if (userData.exists) {
-          Map<String, dynamic> data = userData.data() as Map<String, dynamic>;
-          setState(() {
-            _nameController.text = data['name'] ?? '';
-            _genderController.text = data['Gender'] ?? '';
-            _loanAmountController.text = data['Loan Amount'] ?? '';
-          });
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('No data found for this user')),
-          );
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load data: $e')),
-        );
-      }
+    if (user == null) {
+      debugPrint('User is not authenticated');
+      return null;
+    }
+
+    String userId = user.uid;
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('Applicant_name')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      return snapshot.docs.first.data() as Map<String, dynamic>;
+    }
+
+    return null;
+  }
+
+  Future<void> _loadUserData() async {
+    Map<String, dynamic>? userData = await _fetchUserData();
+    if (userData != null) {
+      setState(() {
+        loanType = userData['loanType'];
+        _nameController.text = userData['name'];
+        _genderController.text = userData['Gender'];
+        _addressController.text = userData['Address'];
+        _accountNumberController.text = userData['AccountNumber'];
+        _fatherNameController.text = userData['Father_name'];
+        _phoneNumberController.text = userData['phone number'];
+        _loanAmountController.text = userData['Loan Amount'];
+        _ifscController.text = userData['ifsc'];
+      });
     }
   }
 
   Future<void> _updateUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
+    if (user == null) {
+      debugPrint('User is not authenticated');
+      return;
+    }
+
+    String userId = user.uid;
+
+    if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseFirestore.instance.collection('Applicant_name').doc(user.uid).update({
-          'name': _nameController.text,
-          'Gender': _genderController.text,
-          'Loan Amount': _loanAmountController.text,
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('User data updated successfully')),
-        );
+        QuerySnapshot snapshot = await FirebaseFirestore.instance
+            .collection('Applicant_name')
+            .where('userId', isEqualTo: userId)
+            .get();
+
+        if (snapshot.docs.isNotEmpty) {
+          String docId = snapshot.docs.first.id;
+
+          await FirebaseFirestore.instance
+              .collection('Applicant_name')
+              .doc(docId)
+              .update({
+            'loanType': loanType,
+            'name': _nameController.text,
+            'Gender': _genderController.text,
+            'Address': _addressController.text,
+            'AccountNumber': _accountNumberController.text,
+            'Father_name': _fatherNameController.text,
+            'phone number': _phoneNumberController.text,
+            'Loan Amount': _loanAmountController.text,
+            'ifsc': _ifscController.text,
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Information updated successfully')),
+          );
+        }
       } catch (e) {
+        debugPrint('Error updating user data: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update user data: $e')),
+          const SnackBar(
+            content: Text('Error updating information. Please try again later'),
+          ),
         );
       }
     }
@@ -345,36 +130,184 @@ class _UserDataPageState extends State<UserDataPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MainColors.body,
-      appBar: AppBar(
-        backgroundColor: MainColors.appbar,
-        title: Center(child: Text('EDIT PROFILE',style: GoogleFonts.audiowide(fontSize:20,color:Colors.white),)),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(label: const Text('Name')),
-            ),
-            TextFormField(
-              controller: _genderController,
-              decoration: InputDecoration(label: const Text('Email')),
-            ),
-            TextFormField(
-              controller: _loanAmountController,
-              decoration: InputDecoration(label: const Text('Phone Number')),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _updateUserData,
-              child: Text('Update Data',style: GoogleFonts.inter(fontSize:20,color:const Color.fromARGB(255, 0, 0, 0)),),
-            ),
-          ],
+        backgroundColor: MainColors.body,
+        appBar: AppBar(
+          backgroundColor: MainColors.appbar,
+          title: const Text(
+            "EDIT PERSONAL INFORMATION",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-    );
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          color: MainColors.lightgreen,
+          child: ListView(
+            padding: const EdgeInsets.all(20.0),
+            children: [
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    DropdownButtonFormField<String>(
+                      value: loanType,
+                      decoration: const InputDecoration(
+                        labelText: "Loan Type",labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: "Car Loan",
+                          child: Text("Car Loan"),
+                        ),
+                        DropdownMenuItem(
+                          value: "Home Loan",
+                          child: Text("Home Loan"),
+                        ),
+                        DropdownMenuItem(
+                          value: "Instant Loan",
+                          child: Text("Instant Loan"),
+                        ),
+                        DropdownMenuItem(
+                          value: "Personal Loan",
+                          child: Text("Personal Loan"),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          loanType = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a loan type*';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _genderController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter your gender';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: "Gender",labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _nameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Your Name',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _addressController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your address';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Your address',labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _fatherNameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your father\'s name';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Father\'s Name',labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _accountNumberController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your valid Account Number';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Account Number',labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _loanAmountController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Loan Amount';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Loan Amount',labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _ifscController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter IFSC';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'IFSC',labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _phoneNumberController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Phone Number';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Phone Number',labelStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: _updateUserData,
+                      child: const Text('Update Profile'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }

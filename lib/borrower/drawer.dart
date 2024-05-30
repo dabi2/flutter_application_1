@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/borrower/contactus.dart';
+import 'package:flutter_application_1/borrower/editprofile.dart';
 import 'package:flutter_application_1/borrower/helpandfaq.dart';
 import 'package:flutter_application_1/borrower/setting.dart';
 import 'package:flutter_application_1/borrower/transactions.dart';
@@ -28,10 +29,10 @@ Widget buildDrawer(BuildContext context){
           leading: const Icon(Icons.person_add_alt_1,color: Colors.white,),
           title: const Text('Edit Profile',style: TextStyle(color: Colors.white),),
           onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const Editprofile()),
-            // );   
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const EditPersonalInformation()),
+            );   
           },
         ),
 

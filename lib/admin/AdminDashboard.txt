@@ -190,7 +190,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              Colors.green, // Change button color to green
+                              Colors.green,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 2), // Make button rectangular

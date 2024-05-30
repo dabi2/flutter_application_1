@@ -18,6 +18,14 @@ class Personalinformation extends StatefulWidget {
 }
 
 class _PersonalinformationState extends State<Personalinformation> {
+  List<int> items = List.generate(20, (i) => i);
+
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      items = List.generate(20, (i) => i + 20);  // Update with new data
+    });
+  }
   bool isFormSubmitted = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? loanType;
@@ -26,11 +34,11 @@ class _PersonalinformationState extends State<Personalinformation> {
       TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  // final TextEditingController _dobController = TextEditingController();
-  // final TextEditingController _aadharController = TextEditingController();
+
   final TextEditingController _loanAmountController = TextEditingController();
   final TextEditingController _ifscController = TextEditingController();
   final TextEditingController _fatherNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   // image picker start
   final ImagePicker _picker = ImagePicker();
@@ -138,6 +146,7 @@ class _PersonalinformationState extends State<Personalinformation> {
             'Address': _addressController.text,
             'AccountNumber': _accountNumberController.text,
             'Father_name': _fatherNameController.text,
+            'phone number': _phoneNumberController.text,
             // 'dob': _dobController.text,
             // 'aadhar': _aadharController.text,
             'Loan Amount': _loanAmountController.text,
@@ -153,6 +162,7 @@ class _PersonalinformationState extends State<Personalinformation> {
           _loanAmountController.clear();
           _ifscController.clear();
           _fatherNameController.clear();
+          _phoneNumberController.clear();
 
           Navigator.push(
             context,
@@ -203,7 +213,7 @@ class _PersonalinformationState extends State<Personalinformation> {
           ),
         ],
       ),
-      body: ListView(
+      body: RefreshIndicator(child: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -501,6 +511,30 @@ class _PersonalinformationState extends State<Personalinformation> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  TextFormField(
+                    controller: _phoneNumberController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Phone Number';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      hintStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.white),
+                      labelText: 'Phone Number',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MainColors.lightgreen,
@@ -517,7 +551,6 @@ class _PersonalinformationState extends State<Personalinformation> {
             ),
           ),
         ],
-      ),
-    );
+      ), onRefresh: _refresh));
   }
 }

@@ -19,6 +19,14 @@ class Loanpage extends StatefulWidget {
 }
 
 class LoanpageState extends State<Loanpage> {
+  List<int> items = List.generate(20, (i) => i);
+
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      items = List.generate(20, (i) => i + 20);  // Update with new data
+    });
+  }
   final List _tenureTypes = ["Month(s)", "Year(s)"];
   String _tenureType = "Year(s)";
   String _emiResult = "";
@@ -81,7 +89,7 @@ class LoanpageState extends State<Loanpage> {
         elevation: 100,
       ),
       drawer: Drawerclass().buildDrawer(context),
-      body: FutureBuilder<QuerySnapshot>(
+      body: RefreshIndicator(onRefresh: _refresh,color: MainColors.lightgreen,child: FutureBuilder<QuerySnapshot>(
         future: FirebaseFirestore.instance
             .collection('Applicant_name')
             .where('userId',
@@ -352,8 +360,7 @@ class LoanpageState extends State<Loanpage> {
             },
           );
         },
-      ),
-    );
+      ),));
   }
 
 // Amortization Formula

@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/borrower/helpandfaq.dart';
 import 'package:flutter_application_1/borrower/setting.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:flutter_application_1/borrower/drawer.dart';
 import 'package:flutter_application_1/borrower/editprofile.dart';
 import 'package:flutter_application_1/login/loginpage.dart';
-// import 'package:flutter_application_1/pages/editable_personal_info.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Profilepagez extends StatefulWidget {
@@ -22,6 +18,14 @@ class Profilepagez extends StatefulWidget {
 }
 
 class _ProfilepagezState extends State<Profilepagez> {
+  List<int> items = List.generate(20, (i) => i);
+
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      items = List.generate(20, (i) => i + 20);  // Update with new data
+    });
+  }
   String userId = "";
   String currentUserName = "User";
 
@@ -89,36 +93,36 @@ class _ProfilepagezState extends State<Profilepagez> {
         elevation: 100,
       ),
       drawer: Drawerclass().buildDrawer(context),
-      body: ListView(
+      body: RefreshIndicator(onRefresh: _refresh,color: MainColors.lightgreen,child: ListView(
         children: [
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Center(
                   child: Column(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    maxRadius: 40,
                     child: Icon(
                       Icons.person,
                       size: 50,
                     ),
-                    backgroundColor: Colors.grey,
-                    maxRadius: 40,
                   ),
                   // SizedBox(
                   //   height: 10,
                   // ),
-                  Text("$currentUserName",style: GoogleFonts.lato(fontSize:20,color:Colors.grey),),
-                  SizedBox(
+                  Text(currentUserName,style: GoogleFonts.lato(fontSize:20,color:Colors.grey),),
+                  const SizedBox(
                     height: 20,
                   ),
                   // Text(
                   //   "MY ACCOUNT",
                   //   style: GoogleFonts.inter(color: Colors.white, fontSize: 20),
                   // ),
-                  Divider(
+                  const Divider(
                     color: Colors.grey,
                     indent: 40,
                     endIndent: 40,
@@ -140,7 +144,7 @@ class _ProfilepagezState extends State<Profilepagez> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const UserDataPage()));
+                                  builder: (context) => const EditPersonalInformation()));
                         },
                         icon: const Icon(
                           Icons.person,
@@ -170,10 +174,10 @@ class _ProfilepagezState extends State<Profilepagez> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Settingscreen(),
+                                builder: (context) => const Settingscreen(),
                               ));
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.settings,
                           color: Colors.white,
                         ),
@@ -184,13 +188,13 @@ class _ProfilepagezState extends State<Profilepagez> {
                             color: Colors.white,
                           ),
                         )),
-                    Icon(
+                    const Icon(
                       Icons.arrow_forward_ios_rounded,
                       color: Colors.white,
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -201,10 +205,10 @@ class _ProfilepagezState extends State<Profilepagez> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => FAQPage(),
+                                builder: (context) => const FAQPage(),
                               ));
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.question_mark_rounded,
                           color: Colors.white,
                         ),
@@ -215,13 +219,13 @@ class _ProfilepagezState extends State<Profilepagez> {
                             color: Colors.white,
                           ),
                         )),
-                    Icon(
+                    const Icon(
                       Icons.arrow_forward_ios_rounded,
                       color: Colors.white,
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -231,7 +235,7 @@ class _ProfilepagezState extends State<Profilepagez> {
                         onPressed: () {
                           _logout(context);
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.logout,
                           color: Colors.grey,
                         ),
@@ -240,26 +244,25 @@ class _ProfilepagezState extends State<Profilepagez> {
                           style: GoogleFonts.inter(
                               fontSize: 20, color: Colors.grey),
                         )),
-                    Icon(
+                    const Icon(
                       Icons.arrow_forward_ios_rounded,
                       color: Colors.white,
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
               ],
             ),
           ),
         ],
-      ),
-    );
+      ),));
   }
 
   void _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LogIn()));
+        context, MaterialPageRoute(builder: (context) => const LogIn()));
   }
 }

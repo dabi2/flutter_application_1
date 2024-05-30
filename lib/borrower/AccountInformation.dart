@@ -1,16 +1,17 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/admin/firebaseApi.dart';
-import 'package:flutter_application_1/borrower/homepage.dart';
+import 'package:flutter_application_1/borrower/bottomnavigatinbar.dart';
 import 'package:flutter_application_1/color/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AccountInformation extends StatefulWidget {
-  const AccountInformation({Key? key, required bool isFormSubmitted})
+  const AccountInformation({Key? key, required this.isFormSubmitted})
       : super(key: key);
+
+  final bool isFormSubmitted;
 
   @override
   State<AccountInformation> createState() => _AccountInformationState();
@@ -24,6 +25,7 @@ class _AccountInformationState extends State<AccountInformation> {
   File? accountProofFile;
 
   User? user;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -37,19 +39,6 @@ class _AccountInformationState extends State<AccountInformation> {
 
   @override
   Widget build(BuildContext context) {
-    final aadharFileName =
-        aadharFile != null ? basename(aadharFile!.path) : 'No file selected';
-    final panFileName =
-        panFile != null ? basename(panFile!.path) : 'No file selected';
-    final categoryFileName = categoryFile != null
-        ? basename(categoryFile!.path)
-        : 'No file selected';
-    final dobFileName =
-        dobFile != null ? basename(dobFile!.path) : 'No file selected';
-    final accountProofFileName = accountProofFile != null
-        ? basename(accountProofFile!.path)
-        : 'No file selected';
-
     return Scaffold(
       backgroundColor: MainColors.body,
       appBar: AppBar(
@@ -62,42 +51,42 @@ class _AccountInformationState extends State<AccountInformation> {
       body: ListView(
         padding: EdgeInsets.all(20.0),
         children: [
-          buildFileUploadSection(context, "Upload Aadhar Card", aadharFileName,
-              () => selectFile((file) => setState(() => aadharFile = file))),
-          buildFileUploadSection(context, "Upload PAN Card", panFileName,
-              () => selectFile((file) => setState(() => panFile = file))),
-          buildFileUploadSection(
-              context,
-              "Upload Category Certificate",
-              categoryFileName,
-              () => selectFile((file) => setState(() => categoryFile = file))),
-          buildFileUploadSection(
-              context,
-              "Upload Date of Birth Proof",
-              dobFileName,
-              () => selectFile((file) => setState(() => dobFile = file))),
-          buildFileUploadSection(
-              context,
-              "Upload Account Proof",
-              accountProofFileName,
-              () => selectFile(
-                  (file) => setState(() => accountProofFile = file))),
+          buildFileUploadSection(context, "Upload Aadhar Card", aadharFile,
+              (file) => setState(() => aadharFile = file)),
+          buildFileUploadSection(context, "Upload PAN Card", panFile,
+              (file) => setState(() => panFile = file)),
+          buildFileUploadSection(context, "Upload Category Certificate",
+              categoryFile, (file) => setState(() => categoryFile = file)),
+          buildFileUploadSection(context, "Upload Date of Birth Proof", dobFile,
+              (file) => setState(() => dobFile = file)),
+          buildFileUploadSection(context, "Upload Account Proof",
+              accountProofFile, (file) => setState(() => accountProofFile = file)),
           SizedBox(height: 20),
           ElevatedButton(
-            onPressed: uploadFiles,
-            child: Text(
-              "Upload All Files",
-              style:
-                  GoogleFonts.inter(fontSize: 16, color: MainColors.lightgreen),
-            ),
+            onPressed: (aadharFile == null ||
+                    panFile == null ||
+                    categoryFile == null ||
+                    dobFile == null ||
+                    accountProofFile == null ||
+                    isLoading)
+                ? null
+                : uploadFiles,
+            child: isLoading
+                ? CircularProgressIndicator()
+                : Text(
+                    "Upload All Files",
+                    style: GoogleFonts.inter(
+                        fontSize: 16, color: MainColors.lightgreen),
+                  ),
           ),
         ],
       ),
     );
   }
 
-  Widget buildFileUploadSection(BuildContext context, String title,
-      String fileName, VoidCallback onPressed) {
+  Widget buildFileUploadSection(BuildContext context, String title, File? file,
+      Function(File) onFileSelected) {
+    final fileName = file != null ? basename(file.path) : 'No file selected';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -109,11 +98,10 @@ class _AccountInformationState extends State<AccountInformation> {
         Text(fileName),
         const SizedBox(height: 10),
         ElevatedButton(
-          onPressed: onPressed,
+          onPressed: () => selectFile(onFileSelected),
           child: Text(
             "Select File",
-            style:
-                GoogleFonts.inter(fontSize: 16, color: MainColors.lightgreen),
+            style: GoogleFonts.inter(fontSize: 16, color: MainColors.lightgreen),
           ),
         ),
         const SizedBox(height: 20),
@@ -132,47 +120,54 @@ class _AccountInformationState extends State<AccountInformation> {
   Future uploadFiles() async {
     if (user == null) return;
 
-    if (aadharFile == null ||
-        panFile == null ||
-        categoryFile == null ||
-        dobFile == null ||
-        accountProofFile == null) {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final userId = user!.uid;
+
+      if (aadharFile != null) await uploadFile(aadharFile!, userId, 'aadhar');
+      if (panFile != null) await uploadFile(panFile!, userId, 'pan');
+      if (categoryFile != null)
+        await uploadFile(categoryFile!, userId, 'category');
+      if (dobFile != null) await uploadFile(dobFile!, userId, 'dob');
+      if (accountProofFile != null)
+        await uploadFile(accountProofFile!, userId, 'account_proof');
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select all required files')),
+        const SnackBar(content: Text('Files uploaded successfully')),
       );
-      return;
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Congratulations!',
+              style: GoogleFonts.inter(color: Colors.green, fontSize: 25)),
+          content: const Text('Your Application Has Been Submitted'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                      builder: (context) => Mybottomnavigationbar()),
+                );
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error uploading files: $e')),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
-
-    final userId = user!.uid;
-
-    if (aadharFile != null) await uploadFile(aadharFile!, userId, 'aadhar');
-    if (panFile != null) await uploadFile(panFile!, userId, 'pan');
-    if (categoryFile != null)
-      await uploadFile(categoryFile!, userId, 'category');
-    if (dobFile != null) await uploadFile(dobFile!, userId, 'dob');
-    if (accountProofFile != null)
-      await uploadFile(accountProofFile!, userId, 'account_proof');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Files uploaded successfully')),
-    );
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title:  Text('Congratulaions!',style: GoogleFonts.inter(color:Colors.green,fontSize:25),),
-        content: const Text('Your Application Has Been Submited'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => MyHomePage()),
-              );
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
   }
 
   Future uploadFile(File file, String userId, String category) async {
